@@ -408,16 +408,25 @@
                     return;
                 }
 
-                container.innerHTML = files.map(file => `
-                    <div class="nav-link" data-path="${file.path}" onclick="loadFile('${file.path}', this)">
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="opacity: 0.6"><path d="M3.75 2h3.5l3.5 3.5v8.75A1.75 1.75 0 019 16H3.75A1.75 1.75 0 012 14.25V3.75C2 2.784 2.784 2 3.75 2z"></path></svg>
-                        ${file.name.replace('.md', '')}
-                    </div>
-                `).join('');
+                container.innerHTML = files.map(file => {
+                    const urlName = file.path.replace('.md', '');
+                    const href = urlName.toLowerCase() === 'readme' ? './' : `?page=${urlName}`;
+                    return `
+                        <a class="nav-link" href="${href}" data-path="${file.path}" onclick="event.preventDefault(); loadFile('${file.path}', this)">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="opacity: 0.6"><path d="M3.75 2h3.5l3.5 3.5v8.75A1.75 1.75 0 019 16H3.75A1.75 1.75 0 012 14.25V3.75C2 2.784 2.784 2 3.75 2z"></path></svg>
+                            ${file.name.replace('.md', '')}
+                        </a>
+                    `;
+                }).join('');
 
                 // Load default if exists
-                const requested = new URLSearchParams(window.location.search).get('page');
-                const target = files.find(f => f.name.toLowerCase() === (requested + ".md").toLowerCase()) || files.find(f => f.name === CONFIG.defaultFile) || files[0];
+                const params = new URLSearchParams(window.location.search);
+                const requested = params.get('page') || params.get('') || window.location.search.substring(1);
+
+                const target = files.find(f => f.name.toLowerCase() === (requested + ".md").toLowerCase())
+                    || files.find(f => f.path.toLowerCase() === (requested + ".md").toLowerCase())
+                    || files.find(f => f.name === CONFIG.defaultFile)
+                    || files[0];
 
                 if (target) {
                     const el = document.querySelector(`[data-path="${target.path}"]`);
@@ -435,7 +444,13 @@
         async function loadFile(path, element) {
             const content = document.getElementById('content');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            if (element) element.classList.add('active');
+            if (element) {
+                element.classList.add('active');
+            } else {
+                // Try to find the element if we loaded via URL
+                const target = document.querySelector(`[data-path="${path}"]`);
+                if (target) target.classList.add('active');
+            }
 
             try {
                 content.innerHTML = `<div style="text-align: center; padding: 100px;">Loading content...</div>`;
@@ -446,9 +461,38 @@
                 generateTOC(content);
                 content.parentElement.scrollTop = 0;
 
-                // Sync History
+                // Sync History - Ensure it is relative to the repo root
                 const urlName = path.replace('.md', '');
-                window.history.replaceState(null, null, urlName === 'README' ? window.location.pathname : `?page=${urlName}`);
+                const cleanBase = window.location.pathname.split('?')[0].split('#')[0];
+                const repoBase = cleanBase.endsWith('/') ? cleanBase : cleanBase.substring(0, cleanBase.lastIndexOf('/') + 1);
+
+                // If we are on index.html, we want to go back to the directory root
+                const finalBase = repoBase.endsWith('index.html/') ? repoBase.replace('index.html/', '') : repoBase;
+
+                const newQuery = urlName.toLowerCase() === 'readme' ? '' : `?page=${urlName}`;
+                window.history.replaceState({ path }, null, finalBase + newQuery);
+
+                // Handle relative links inside the content
+                content.querySelectorAll('a').forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                        link.onclick = (e) => {
+                            e.preventDefault();
+                            let targetPath = href;
+
+                            // Resolve relative paths if not absolute-in-repo
+                            if (!href.startsWith('/')) {
+                                const currentDir = path.includes('/') ? path.substring(0, path.lastIndexOf('/') + 1) : '';
+                                targetPath = currentDir + href;
+                            } else {
+                                targetPath = href.substring(1); // Remove leading slash for local loading
+                            }
+
+                            if (!targetPath.endsWith('.md') && !targetPath.includes('.')) targetPath += '.md';
+                            loadFile(targetPath);
+                        };
+                    }
+                });
             } catch (err) {
                 content.innerHTML = `<h1>Error</h1><p>Failed to load ${path}. Ensure the file exists on the main branch.</p>`;
             }

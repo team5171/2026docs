@@ -3,11 +3,25 @@
 
 <head>
     <script>
-        // Extract the page from the path and redirect to the base with ?page=
-        const segments = window.location.pathname.split('/').filter(Boolean);
-        const page = segments.pop();
-        const base = '/' + segments.join('/') + '/';
-        window.location.href = base + "?page=" + encodeURIComponent(page);
+        // Extract the full path after the repo name and redirect to the base index.html
+        const path = window.location.pathname;
+        const repo = "/2026docs/";
+
+        // Find the part of the path after the repo name
+        let page = path;
+        if (path.startsWith(repo)) {
+            page = path.substring(repo.length);
+        } else if (path.includes(repo)) {
+            page = path.split(repo)[1];
+        }
+
+        // Clean up trailing slashes or index.html
+        if (page.endsWith('/')) page = page.slice(0, -1);
+        if (page === 'index.html' || !page) {
+            window.location.href = repo;
+        } else {
+            window.location.href = repo + "?page=" + encodeURIComponent(page);
+        }
     </script>
 </head>
 

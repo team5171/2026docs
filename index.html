@@ -313,6 +313,127 @@
             border-color: var(--accent-primary);
             color: var(--text-main);
         }
+
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal h3 {
+            margin-top: 0;
+            font-family: 'Outfit', sans-serif;
+            color: white;
+        }
+
+        .modal input,
+        .modal textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal textarea {
+            height: 200px;
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: #0d1117;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-dim);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--accent-primary);
+            color: #0d1117;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: none;
+            z-index: 1001;
+            box-shadow: 0 8px 24px rgba(88, 166, 255, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-footer {
+            margin-top: auto;
+            padding: 24px;
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-align: center;
+        }
+
+        .nav-footer strong {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -325,6 +446,19 @@
         <div class="nav-group-title">Documentation</div>
         <div id="page-list">
             <div class="nav-link">Loading files...</div>
+        </div>
+        <div class="nav-group-title">Actions</div>
+        <div class="nav-link" onclick="sharePage()">
+            <img src="svg/share.svg" width="16" height="16" style="opacity: 0.8;"> Share Page
+        </div>
+        <div class="nav-link" onclick="editPage()">
+            <img src="svg/edit.svg" width="16" height="16" style="opacity: 0.8;"> Edit in GitHub
+        </div>
+        <div class="nav-link" onclick="addPageModal()">
+            <img src="svg/add.svg" width="16" height="16" style="opacity: 0.8;"> Add New Page
+        </div>
+        <div class="nav-footer">
+            Created by <strong>Veer Bajaj</strong> with <strong>Team 5171</strong>
         </div>
     </nav>
 
@@ -372,13 +506,32 @@
         </div>
     </aside>
 
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <h3 id="modal-title">Add New Page</h3>
+            <input type="text" id="page-name" placeholder="Page name (e.g. Getting Started)">
+            <textarea id="page-content" placeholder="Page content (Markdown supported)"></textarea>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitAddPage()">Create on GitHub</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Link copied to clipboard!</div>
+
     <script>
         const CONFIG = {
             owner: "team5171",
             repo: "2026docs",
             branch: "main",
             defaultFile: "README.md",
-            logo: "https://github.com/team5171.png"
+            logo: "https://github.com/team5171.png",
+            baseUrl: "https://team5171.github.io/2026docs"
+        };
+
+        const state = {
+            currentPath: CONFIG.defaultFile
         };
 
         const ENDPOINTS = {
@@ -442,6 +595,7 @@
         }
 
         async function loadFile(path, element) {
+            state.currentPath = path;
             const content = document.getElementById('content');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             if (element) {
@@ -555,6 +709,47 @@
 
         // Mobile Sidebar Toggle
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+        // Actions
+        function sharePage() {
+            const pageName = state.currentPath.replace('.md', '');
+            const url = pageName.toLowerCase() === 'readme'
+                ? CONFIG.baseUrl + '/'
+                : `${CONFIG.baseUrl}/${pageName}`;
+
+            navigator.clipboard.writeText(url).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => toast.style.display = 'none', 3000);
+            });
+        }
+
+        function editPage() {
+            const url = `https://github.com/${CONFIG.owner}/${CONFIG.repo}/edit/${CONFIG.branch}/${state.currentPath}`;
+            window.open(url, '_blank');
+        }
+
+        function addPageModal() {
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+
+        function submitAddPage() {
+            const name = document.getElementById('page-name').value.trim();
+            const contents = document.getElementById('page-content').value;
+
+            if (!name) {
+                alert("Please enter a page name.");
+                return;
+            }
+
+            const url = `https://github.com/${CONFIG.owner}/${CONFIG.repo}/new/${CONFIG.branch}?filename=${encodeURIComponent(name)}.md&value=${encodeURIComponent(contents)}`;
+            window.open(url, '_blank');
+            closeModal();
+        }
 
         init();
     </script>

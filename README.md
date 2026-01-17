@@ -20,10 +20,15 @@ First things first: we need to get your machine ready to talk to the robot.
 
 In the world of FRC, you don't need to know everything—you just need to know where to find it. Here are the keys to the kingdom:
 
-*   **[Official WPILib Documentation](https://docs.wpilib.org/):** The "Bible" of FRC programming. If you have a question about how a motor works or how to schedule a command, start here.
-*   **[2026 Game Manual (REBUILT)](https://www.firstinspires.org/resources/library/frc/season-materials):** Read the rules! You can't code the robot if you don't know what it's allowed to do.
-*   **[REV Robotics Docs](https://docs.revrobotics.com/):** For everything relating to SPARK MAX/Flex motor controllers and the Power Distribution Hub.
-*   **[CTRE Phoenix Docs](https://v6.docs.ctr-electronics.com/):** For Talon FXs, CANcoders, and the Pigeon 2.0.
+
+* **[Official WPILib Documentation](https://docs.wpilib.org/en/latest/docs/software/what-is-wpilib.html):** The "Bible" of FRC programming. This covers the core framework, command-based programming, and basic hardware interaction.
+* **[YAGSL (Swerve Drive)](https://docs.yagsl.com/):** A specialized library designed to simplify the complex math and configuration required for Swerve Drive controllers.
+* **[PathPlanner](https://pathplanner.dev/home.html):** The go-to tool for autonomous motion profiling, allowing you to draw paths and follow them with high precision.
+* **[PhotonVision](https://photonvision.org/):** An open-source vision processing solution essential for AprilTag tracking and robot state estimation/odometry.
+* **[REVLib (REV Robotics)](https://docs.revrobotics.com/revlib):** The vendor library for everything relating to SPARK MAX/Flex motor controllers, NEO motors, and the Power Distribution Hub.
+* **[Phoenix 6 (CTRE)](https://v6.docs.ctr-electronics.com/en/latest/index.html):** The software suite for high-performance hardware like Talon FXs, CANcoders, and the Pigeon 2.0.
+* **[ThriftyLib](https://docs.home.thethriftybot.com/):** Documentation and support for The Thrifty Bot encoders and hardware components.
+
 
 ---
 

@@ -3,10 +3,11 @@
 
 <head>
     <script>
-        // Get the path (e.g., /sensors), remove leading slash
-        const path = window.location.pathname.split('/').pop();
-        // Redirect to index with a query parameter
-        window.location.href = "?page=" + encodeURIComponent(path);
+        // Extract the page from the path and redirect to the base with ?page=
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        const page = segments.pop();
+        const base = '/' + segments.join('/') + '/';
+        window.location.href = base + "?page=" + encodeURIComponent(page);
     </script>
 </head>
 

@@ -84,6 +84,7 @@
             font-size: 1.2rem;
             margin: 0;
             background: linear-gradient(to right, #fff, #8b949e);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -447,7 +448,7 @@
 
                 // Sync History
                 const urlName = path.replace('.md', '');
-                window.history.replaceState(null, null, urlName === 'README' ? '/' : `?page=${urlName}`);
+                window.history.replaceState(null, null, urlName === 'README' ? window.location.pathname : `?page=${urlName}`);
             } catch (err) {
                 content.innerHTML = `<h1>Error</h1><p>Failed to load ${path}. Ensure the file exists on the main branch.</p>`;
             }

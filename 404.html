@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        // Get the path (e.g., /sensors), remove leading slash
+        const path = window.location.pathname.split('/').pop();
+        // Redirect to index with a query parameter
+        window.location.href = "?page=" + encodeURIComponent(path);
+    </script>
+</head>
+
+<body>
+    Redirecting...
+</body>
+
+</html>

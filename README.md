@@ -1,57 +1,48 @@
-# Hello! This is a software guide!
+# Team 5171 - Software Development Hub 2026 🤖💻
 
-Please download software [from here](https://docs.wpilib.org/en/latest/docs/zero-to-robot/step-2/wpilib-setup.html) to get ready.
+Welcome to the digital nervous system of Team 5171! Whether you're here to write your first line of Java or you're a seasoned pro optimizing swerve drive paths, you've come to the right place.
 
+This documentation is designed to be your ally. It’s more than just a setup guide; it’s a living record of our decisions, our struggles, and our triumphs as we build something incredible for the **REBUILT (2026)** season.
 
-# Notes from meetings
+---
 
-- **[Lexseal](https://github.com/lexseal)**
-  - Commit to design
-  - Reduced “tasks”
-  - NO PARABOLA CALCULATION - failed last time. 
-  - Brute forcing the values - not making with physics. Start with this
-  - Shoot in the neutral zone
-  - High enough
-  - Functions for reuse - independent modules
-  - Locate yourself
-# _[2025](https://github.com/team5171/FRC-2025/tree/main)_ Recap (made simple by AI)
+## 🚀 Getting Started
 
-### Is there any Python?
+First things first: we need to get your machine ready to talk to the robot.
 
-No, there is **no Python** code in this project.
+1.  **Download the Software:** Grab the WPILib Installer [from here](https://docs.wpilib.org/en/latest/docs/zero-to-robot/step-2/wpilib-setup.html).
+2.  **Install Java:** The installer should handle this, but make sure you're using the version specified for the 2026 season.
+3.  **Clone the Repo:** If you haven't already, get this code onto your computer and open it in VS Code!
 
-* **Java** is the primary programming language used to write the robot's logic (found in the `src/main/java` folders).
-* **Groovy** (a scripting language similar to Java) is used for the configuration files like `build.gradle` and `settings.gradle`.
-* **JSON** is used for configuration data, such as motor settings and paths for the robot to follow (found in the `src/main/deploy` folder).
+---
 
-### Project Layout Explanation (For Non-Java Speakers)
+## 📚 Essential Reference Links
 
-Think of this project like a **construction kit** for a robot. The layout follows a standard format used in professional software development (specifically the Gradle build system) and the FIRST Robotics Competition (WPILib).
+In the world of FRC, you don't need to know everything—you just need to know where to find it. Here are the keys to the kingdom:
 
-#### 1. The "Instructions" (Root Folder)
+*   **[Official WPILib Documentation](https://docs.wpilib.org/):** The "Bible" of FRC programming. If you have a question about how a motor works or how to schedule a command, start here.
+*   **[2026 Game Manual (REBUILT)](https://www.firstinspires.org/resource-library/frc/competition-manual-and-resources):** Read the rules! You can't code the robot if you don't know what it's allowed to do.
+*   **[REV Robotics Docs](https://docs.revrobotics.com/):** For everything relating to SPARK MAX/Flex motor controllers and the Power Distribution Hub.
+*   **[CTRE Phoenix Docs](https://v6.docs.ctr-electronics.com/):** For Talon FXs, CANcoders, and the Pigeon 2.0.
 
-The files at the very top level are the "instruction manuals" for your computer so it knows how to put the project together:
+---
 
-* **`build.gradle`**: This is the master list of requirements. It tells the computer what version of Java to use, what external "tools" (libraries) to download (like motor controller software), and how to package the code to send it to the robot.
-* **`settings.gradle`**: This handles basic setup, like telling the computer where to find those tools on your hard drive.
-* **`gradlew`**: This is a small helper script that ensures everyone working on the project uses the exact same version of the construction tools.
+## 📂 Documentation & Archives
 
-#### 2. The "Brains" (`src/main/java`)
+We keep our notes organized so we don't repeat the mistakes of the past. Check out these separate guides for specific areas:
 
-This is where the actual logic lives. It is organized into "packages" (folders) to keep things tidy:
+| Document | Description |
+| :--- | :--- |
+| **[The Book of CAD](<The Book of CAD Team 5171.md>)** | Everything from how to use Fusion 360 to turning it into your ally. |
+| **[Meeting Notes](Meetings.md)** | Core design decisions, technical specs (like the Lexseal design), and task lists. |
+| **[2025 Archive](2025-Recap.md)** | A simple breakdown of last year's project layout and tech stack for reference. |
 
-* **`frc/robot`**: Contains the core logic. `Robot.java` is the main entry point that runs when the robot turns on.
-* **`subsystems`**: Think of these as the "body parts" of the robot (e.g., `Drivetrain.java`, `Elevator.java`, `Climber.java`). Each file controls one specific physical mechanism.
-* **`commands`**: These are the "actions" the robot can take (e.g., `DriveToDistance.java` or `Rumble.java`).
-* **`swervelib`**: This is a specialized library included in your project to handle "Swerve Drive," a complex type of drivetrain where every wheel can move and steer independently.
+---
 
-#### 3. The "Gear Bag" (`src/main/deploy`)
+## 💡 Pro-Tips for the 2026 Season
 
-These are files that aren't code, but the code needs them to work.
+*   **Commit Often:** Don't wait until the end of the day. Small, frequent commits make it easier to track changes and fix bugs.
+*   **Keep it Modular:** Write functions for reuse. If you find yourself copying and pasting code, it should probably be its own method or class.
+*   **Ask for Help:** FRC is a team sport. If you're stuck for more than 20 minutes, grab a teammate or a mentor!
 
-* **`swerve/`**: Contains JSON files that describe the physical robot, such as which motor is plugged into which port.
-* **`pathplanner/`**: Contains the pre-planned "routes" the robot will drive automatically during the start of a match.
-
-#### 4. The "Store" (`vendordeps`)
-
-In robotics, we use parts from different companies (like REV or CTR Electronics). These files tell the project how to automatically "shop" for and download the specific software needed to talk to those companies' hardware.
+Happy coding, and let's make the 2026 season our best one yet! 🚀

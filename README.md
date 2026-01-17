@@ -12,7 +12,7 @@ First things first: we need to get your machine ready to talk to the robot.
 
 1.  **Download the Software:** Grab the WPILib Installer [from here](https://docs.wpilib.org/en/latest/docs/zero-to-robot/step-2/wpilib-setup.html).
 2.  **Install Java:** The installer should handle this, but make sure you're using the version specified for the 2026 season.
-3.  **Clone the Repo:** If you haven't already, get this code onto your computer and open it in VS Code!
+
 
 ---
 
@@ -21,7 +21,7 @@ First things first: we need to get your machine ready to talk to the robot.
 In the world of FRC, you don't need to know everything—you just need to know where to find it. Here are the keys to the kingdom:
 
 *   **[Official WPILib Documentation](https://docs.wpilib.org/):** The "Bible" of FRC programming. If you have a question about how a motor works or how to schedule a command, start here.
-*   **[2026 Game Manual (REBUILT)](https://www.firstinspires.org/resource-library/frc/competition-manual-and-resources):** Read the rules! You can't code the robot if you don't know what it's allowed to do.
+*   **[2026 Game Manual (REBUILT)](https://www.firstinspires.org/resources/library/frc/season-materials):** Read the rules! You can't code the robot if you don't know what it's allowed to do.
 *   **[REV Robotics Docs](https://docs.revrobotics.com/):** For everything relating to SPARK MAX/Flex motor controllers and the Power Distribution Hub.
 *   **[CTRE Phoenix Docs](https://v6.docs.ctr-electronics.com/):** For Talon FXs, CANcoders, and the Pigeon 2.0.
 
@@ -33,9 +33,8 @@ We keep our notes organized so we don't repeat the mistakes of the past. Check o
 
 | Document | Description |
 | :--- | :--- |
-| **[The Book of CAD](<The Book of CAD Team 5171.md>)** | Everything from how to use Fusion 360 to turning it into your ally. |
-| **[Meeting Notes](Meetings.md)** | Core design decisions, technical specs (like the Lexseal design), and task lists. |
-| **[2025 Archive](2025-Recap.md)** | A simple breakdown of last year's project layout and tech stack for reference. |
+| **[Meeting Notes](/meetings)** | Core design decisions, technical specs (like the Lexseal design), and task lists. |
+| **[2025 Archive](/2025-Recap)** | A simple breakdown of last year's project layout and tech stack for reference. |
 
 ---
 

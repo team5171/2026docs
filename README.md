@@ -38,8 +38,9 @@ We keep our notes organized so we don't repeat the mistakes of the past. Check o
 
 | Document | Description |
 | :--- | :--- |
-| **[Meeting Notes](/meetings)** | Core design decisions, technical specs (like the Lexseal design), and task lists. |
-| **[2025 Archive](/2025-Recap)** | A simple breakdown of last year's project layout and tech stack for reference. |
+| **[Meeting Notes](/2026docs/meetings)** | Notes from our meetings with other teams/people. |
+| **[2025 Archive](/2026docs/2025)** | A simple breakdown of last year's project layout and tech stack for reference. |
+| **[Current Tasks](/2026docs/CurrentTasks)** | A list of tasks we need to complete now for the 2026 season. |
 
 ---
 

@@ -1,4 +1,5 @@
 # Team 5171 - Software Development Hub 2026 🤖💻
+__Version:__ 2026.1.17.2
 
 Welcome to the digital nervous system of Team 5171! Whether you're here to write your first line of Java or you're a seasoned pro optimizing swerve drive paths, you've come to the right place.
 

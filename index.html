@@ -459,7 +459,7 @@
         </div>
         <div class="nav-footer">
             Created by <strong>Veer Bajaj</strong> with <strong>Team 5171</strong>
-            MiWiKi v2.0.1
+            Kiwi Docs v2.0.1
         </div>
     </nav>
 
@@ -614,18 +614,17 @@
 
                 content.innerHTML = marked.parse(text);
 
-                // Fix relative asset paths (images, videos, sources)
+                // Fix relative asset paths (images, videos, audio, sources)
                 const currentDir = path.includes('/') ? path.substring(0, path.lastIndexOf('/') + 1) : '';
-                if (currentDir) {
-                    content.querySelectorAll('img, video, source').forEach(el => {
-                        ['src', 'poster'].forEach(attr => {
-                            const val = el.getAttribute(attr);
-                            if (val && !val.startsWith('http') && !val.startsWith('/') && !val.startsWith('data:')) {
-                                el.setAttribute(attr, currentDir + val);
-                            }
-                        });
+                content.querySelectorAll('img, video, audio, source').forEach(el => {
+                    ['src', 'poster'].forEach(attr => {
+                        const val = el.getAttribute(attr);
+                        if (val && !val.startsWith('http') && !val.startsWith('/') && !val.startsWith('data:')) {
+                            const fullPath = currentDir + val;
+                            el.setAttribute(attr, ENDPOINTS.raw(fullPath));
+                        }
                     });
-                }
+                });
 
                 generateTOC(content);
                 content.parentElement.scrollTop = 0;

@@ -5,6 +5,13 @@ Welcome to the digital nervous system of Team 5171! Whether you're here to write
 
 This documentation is designed to be your ally. It’s more than just a setup guide; it’s a living record of our decisions, our struggles, and our triumphs as we build something incredible for the **REBUILT (2026)** season.
 
+**Season Video:**
+<br>
+<video controls width="250" height="150">
+    <source src="game/animation.mp4" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="game/animation.mp4">this link</a> to watch the video.
+</video>
+
 ---
 
 ## 🚀 Getting Started
@@ -39,9 +46,9 @@ We keep our notes organized so we don't repeat the mistakes of the past. Check o
 
 | Document | Description |
 | :--- | :--- |
-| **[Meeting Notes](/2026docs/meetings)** | Notes from our meetings with other teams/people. |
-| **[2025 Archive](/2026docs/2025)** | A simple breakdown of last year's project layout and tech stack for reference. |
-| **[Current Tasks](/2026docs/CurrentTasks)** | A list of tasks we need to complete now for the 2026 season. |
+| **[Meeting Notes](/meetings)** | Notes from our meetings with other teams/people. |
+| **[2025 Archive](/2025)** | A simple breakdown of last year's project layout and tech stack for reference. |
+| **[Current Tasks](/CurrentTasks)** | A list of tasks we need to complete now for the 2026 season. |
 
 ---
 

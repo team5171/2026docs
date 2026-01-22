@@ -459,6 +459,7 @@
         </div>
         <div class="nav-footer">
             Created by <strong>Veer Bajaj</strong> with <strong>Team 5171</strong>
+            MiWiKi v2.0.1
         </div>
     </nav>
 
@@ -537,7 +538,7 @@
         const ENDPOINTS = {
             contents: `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents?ref=${CONFIG.branch}`,
             commits: `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/commits?sha=${CONFIG.branch}&per_page=5`,
-            raw: (path) => `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${CONFIG.branch}/${path}`
+            raw: (path) => `./${path}`
         };
 
         async function init() {
@@ -612,6 +613,20 @@
                 const text = await res.text();
 
                 content.innerHTML = marked.parse(text);
+
+                // Fix relative asset paths (images, videos, sources)
+                const currentDir = path.includes('/') ? path.substring(0, path.lastIndexOf('/') + 1) : '';
+                if (currentDir) {
+                    content.querySelectorAll('img, video, source').forEach(el => {
+                        ['src', 'poster'].forEach(attr => {
+                            const val = el.getAttribute(attr);
+                            if (val && !val.startsWith('http') && !val.startsWith('/') && !val.startsWith('data:')) {
+                                el.setAttribute(attr, currentDir + val);
+                            }
+                        });
+                    });
+                }
+
                 generateTOC(content);
                 content.parentElement.scrollTop = 0;
 
@@ -631,6 +646,9 @@
                     const href = link.getAttribute('href');
                     if (href && !href.startsWith('http') && !href.startsWith('#')) {
                         link.onclick = (e) => {
+                            const isDoc = href.endsWith('.md') || !href.includes('.');
+                            if (!isDoc) return; // Let assets/other files load normally
+
                             e.preventDefault();
                             let targetPath = href;
 

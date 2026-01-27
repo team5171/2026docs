@@ -1,5 +1,5 @@
 # Team 5171 - Software Development Hub 2026 🤖💻
-__Version:__ 2026.1.17.2
+__Version:__ 2026.1.26.1
 
 Welcome to the digital nervous system of Team 5171! Whether you're here to write your first line of Java or you're a seasoned pro optimizing swerve drive paths, you've come to the right place.
 
@@ -14,7 +14,7 @@ This documentation is designed to be your ally. It’s more than just a setup gu
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 First things first: we need to get your machine ready to talk to the robot.
 
@@ -24,7 +24,7 @@ First things first: we need to get your machine ready to talk to the robot.
 
 ---
 
-## 📚 Essential Reference Links
+## Essential Reference Links
 
 In the world of FRC, you don't need to know everything—you just need to know where to find it. Here are the keys to the kingdom:
 
@@ -40,7 +40,7 @@ In the world of FRC, you don't need to know everything—you just need to know w
 
 ---
 
-## 📂 Documentation & Archives
+## Documentation & Archives
 
 We keep our notes organized so we don't repeat the mistakes of the past. Check out these separate guides for specific areas:
 
@@ -52,10 +52,10 @@ We keep our notes organized so we don't repeat the mistakes of the past. Check o
 
 ---
 
-## 💡 Pro-Tips for the 2026 Season
+## Pro-Tips for the 2026 Season
 
 *   **Commit Often:** Don't wait until the end of the day. Small, frequent commits make it easier to track changes and fix bugs.
 *   **Keep it Modular:** Write functions for reuse. If you find yourself copying and pasting code, it should probably be its own method or class.
 *   **Ask for Help:** FRC is a team sport. If you're stuck for more than 20 minutes, grab a teammate or a mentor!
 
-Happy coding, and let's make the 2026 season our best one yet! 🚀
+Happy coding, and let's make the 2026 season our best one yet!

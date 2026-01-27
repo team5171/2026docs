@@ -1,1 +1,17 @@
-Here’s a message from Mentor Kevin: The software folks can work on reading through the WPILib docs and now that they all have access to GitHub, can start looking at last years' robot code. The drive station laptop and robot are all set up if they want to drive it around. Could be a good exercise to have them look at the robot code to understand which buttons do what. Just careful not to run any auto routines”
+# January 26, 2026
+
+Download WPILib and make sure you read these:
+
+## Core Concepts
+
+* [Command-Based (CB) Programming](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html)
+
+---
+
+# January 17, 2026
+
+Message from Mentor Kevin:
+
+> The software team can start by reading through the WPILib docs. Now that everyone has GitHub access, they can also look at last year’s robot code. The driver station laptop and robot are all set up if they want to drive it around.
+>
+> It could be a good exercise to review the robot code to understand which buttons do what. Just be careful not to run any autonomous routines.

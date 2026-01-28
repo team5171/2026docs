@@ -434,6 +434,42 @@
             color: var(--accent-primary);
             font-weight: 600;
         }
+
+        /* Auth Overlay */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #090b0f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .auth-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(88, 166, 255, 0.1);
+        }
+
+        .auth-box h2 {
+            margin-top: 0;
+            font-family: 'Outfit', sans-serif;
+            color: white;
+        }
+
+        .auth-box p {
+            color: var(--text-dim);
+            margin-bottom: 24px;
+        }
     </style>
 </head>
 
@@ -492,7 +528,7 @@
                             d="M10.896 2H4.95A1.75 1.75 0 003.2 3.75v9.5c0 .966.784 1.75 1.75 1.75h6.926a1.75 1.75 0 001.75-1.75V3.75A1.75 1.75 0 0011.875 2h-.979zM5 3.5h5.875a.25.25 0 01.25.25v1.5a.25.25 0 01-.25.25H5a.25.25 0 01-.25-.25v-1.5A.25.25 0 015 3.5z">
                         </path>
                     </svg> Updates</h2>
-                <div style="display: flex; gap: 8px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <select id="year-select" class="config-select" onchange="refreshActivity()">
                         <option value="2026" selected>2026</option>
                         <option value="2025">2025</option>
@@ -500,6 +536,11 @@
                     <select id="type-select" class="config-select" onchange="refreshActivity()">
                         <option value="FRC" selected>FRC</option>
                         <option value="testbot">Test</option>
+                    </select>
+                    <select id="view-select" class="config-select" onchange="refreshActivity()">
+                        <option value="commits" selected>Commits</option>
+                        <option value="issues">Issues</option>
+                        <option value="pulls">PRs</option>
                     </select>
                 </div>
             </div>
@@ -519,6 +560,30 @@
         </div>
     </div>
 
+    <!-- Auth Overlay -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-box" id="auth-step-1">
+            <div class="logo-circle" style="width: 48px; height: 48px; margin: 0 auto 16px;"></div>
+            <h2>Security Check</h2>
+            <p>To access internal documentation, please verify your identity.</p>
+            <input type="text" id="mascot-input" placeholder="What is our mascot?">
+            <button class="btn btn-primary" style="width: 100%;" onclick="checkMascot()">Verify</button>
+            <div id="auth-error-1" style="color: #ff7b72; font-size: 0.8rem; margin-top: 12px; display: none;">
+                Incorrect. Try again.</div>
+        </div>
+
+        <div class="auth-box" id="auth-step-2" style="display: none;">
+            <div class="logo-circle" style="width: 48px; height: 48px; margin: 0 auto 16px;"></div>
+            <h2>Enter Access Token</h2>
+            <p>Please enter your GitHub Personal Access Token (PAT) to view secure content.</p>
+            <input type="password" id="pat-input" placeholder="ghp_...">
+            <button class="btn btn-primary" style="width: 100%;" onclick="savePat()">Access Docs</button>
+            <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-dim);">
+                Token is stored locally in your browser and never sent to our servers.
+            </div>
+        </div>
+    </div>
+
     <div id="toast">Link copied to clipboard!</div>
 
     <script>
@@ -528,20 +593,48 @@
             branch: "main",
             defaultFile: "README.md",
             logo: "https://github.com/team5171.png",
-            baseUrl: "https://team5171.github.io/2026docs"
+            baseUrl: "https://team5171.github.io/2026docs",
+            authWorker: "https://team5171pat.veerbajaj11.workers.dev" // Enter your Worker URL here (e.g., https://auth.team5171.workers.dev)
         };
 
         const state = {
-            currentPath: CONFIG.defaultFile
+            currentPath: CONFIG.defaultFile,
+            pat: localStorage.getItem('gh_pat') || null
         };
 
         const ENDPOINTS = {
             contents: `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents?ref=${CONFIG.branch}`,
-            commits: `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/commits?sha=${CONFIG.branch}&per_page=5`,
             raw: (path) => `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${CONFIG.branch}/${path}`
         };
 
+        function getHeaders() {
+            return state.pat ? { 'Authorization': `token ${state.pat}` } : {};
+        }
+
+
         async function init() {
+            // Check Local Storage
+            if (state.pat) {
+                document.getElementById('auth-overlay').style.display = 'none';
+            }
+            // Try Auto-Auth (if configured)
+            else if (CONFIG.authWorker) {
+                const autoToken = await tryAutoAuth();
+                if (autoToken) {
+                    state.pat = autoToken;
+                    localStorage.setItem('gh_pat', autoToken);
+                    document.getElementById('auth-overlay').style.display = 'none';
+                } else {
+                    document.getElementById('auth-overlay').style.display = 'flex';
+                    return;
+                }
+            }
+            // Fallback to Overlay
+            else {
+                document.getElementById('auth-overlay').style.display = 'flex';
+                return;
+            }
+
             try {
                 await Promise.all([loadFileList(), refreshActivity()]);
             } catch (err) {
@@ -549,11 +642,54 @@
             }
         }
 
+        // Auth Functions
+        async function tryAutoAuth() {
+            try {
+                // Determine if we are on the correct origin to avoid unnecessary errors
+                // However, the worker handles the origin check, so we can just try.
+                const res = await fetch(CONFIG.authWorker);
+                if (res.ok) {
+                    const data = await res.json();
+                    return data.token;
+                }
+            } catch (err) {
+                console.log("Auto-auth skipped or failed.");
+            }
+            return null;
+        }
+
+        function checkMascot() {
+            const input = document.getElementById('mascot-input').value.trim().toLowerCase();
+            const error = document.getElementById('auth-error-1');
+
+            if (input === 'falcons') {
+                document.getElementById('auth-step-1').style.display = 'none';
+                document.getElementById('auth-step-2').style.display = 'block';
+                error.style.display = 'none';
+            } else {
+                error.style.display = 'block';
+                document.getElementById('mascot-input').classList.add('shake');
+                setTimeout(() => document.getElementById('mascot-input').classList.remove('shake'), 500);
+            }
+        }
+
+        function savePat() {
+            const token = document.getElementById('pat-input').value.trim();
+            if (token) {
+                localStorage.setItem('gh_pat', token);
+                state.pat = token;
+                document.getElementById('auth-overlay').style.display = 'none';
+                init();
+            }
+        }
+
         async function loadFileList() {
             const container = document.getElementById('page-list');
             try {
-                const res = await fetch(ENDPOINTS.contents);
+                const res = await fetch(ENDPOINTS.contents, { headers: getHeaders() });
+                if (res.status === 401 || res.status === 403) throw new Error("Unauthorized");
                 if (!res.ok) throw new Error("Repo not found");
+
                 const items = await res.json();
                 const files = items.filter(i => i.name.endsWith('.md'));
 
@@ -588,9 +724,16 @@
                 }
 
             } catch (err) {
+                if (err.message === "Unauthorized") {
+                    // Clear PAT and re-auth if token is bad
+                    localStorage.removeItem('gh_pat');
+                    state.pat = null;
+                    init(); // Will trigger auth overlay
+                    return;
+                }
                 container.innerHTML = `<div style="padding: 24px; font-size: 0.8rem; color: #ff7b72;">
                     Failed to connect to GitHub.<br>
-                    Verify <strong>${CONFIG.owner}/${CONFIG.repo}</strong> is public.
+                    Verify <strong>${CONFIG.owner}/${CONFIG.repo}</strong> is accessible.
                 </div>`;
             }
         }
@@ -602,26 +745,47 @@
             if (element) {
                 element.classList.add('active');
             } else {
-                // Try to find the element if we loaded via URL
                 const target = document.querySelector(`[data-path="${path}"]`);
                 if (target) target.classList.add('active');
             }
 
             try {
                 content.innerHTML = `<div style="text-align: center; padding: 100px;">Loading content...</div>`;
-                const res = await fetch(ENDPOINTS.raw(path));
+
+                // For raw content, we can try using the API to get content if it's private and raw.githubusercontent doesn't support auth via token in URL easily (it does via header but raw.githubusercontent is CORS strict sometimes).
+                // Better to use the API contents endpoint with Accept: application/vnd.github.v3.raw
+
+                const rawUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}?ref=${CONFIG.branch}`;
+                const res = await fetch(rawUrl, {
+                    headers: {
+                        ...getHeaders(),
+                        'Accept': 'application/vnd.github.v3.raw'
+                    }
+                });
+
+                if (!res.ok) throw new Error("Failed to load");
                 const text = await res.text();
 
                 content.innerHTML = marked.parse(text);
 
-                // Fix relative asset paths (images, videos, audio, sources)
+                // Fix relative asset paths - logic updated to use API for checking or just reconstruct raw URLs
+                // Note: Binary assets in private repos are tricky with simple img src. 
+                // We'll assume public for assets OR use creating object URLs which is complex.
+                // For now, let's keep the raw endpoint replacement for public/consistent usage, but it might break for private images without a token in the URL.
+                // A common workaround is ?token=... but we don't get that easily.
+                // Let's stick to the previous implementation for assets, but maybe prepend the raw base.
+
                 const currentDir = path.includes('/') ? path.substring(0, path.lastIndexOf('/') + 1) : '';
                 content.querySelectorAll('img, video, audio, source').forEach(el => {
                     ['src', 'poster'].forEach(attr => {
                         const val = el.getAttribute(attr);
                         if (val && !val.startsWith('http') && !val.startsWith('/') && !val.startsWith('data:')) {
                             const fullPath = currentDir + val;
-                            el.setAttribute(attr, ENDPOINTS.raw(fullPath));
+                            // For private images to work in <img> tags, we'd need a signed URL or blob. 
+                            // If this is a public repo, raw.githubusercontent works. 
+                            // If private, this remains a limitation of static sites without a proxy.
+                            // However, we can try using the raw endpoint.
+                            el.setAttribute(attr, `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${CONFIG.branch}/${fullPath}`);
                         }
                     });
                 });
@@ -629,49 +793,41 @@
                 generateTOC(content);
                 content.parentElement.scrollTop = 0;
 
-                // Sync History - Ensure it is relative to the repo root
                 const urlName = path.replace('.md', '');
                 const cleanBase = window.location.pathname.split('?')[0].split('#')[0];
                 const repoBase = cleanBase.endsWith('/') ? cleanBase : cleanBase.substring(0, cleanBase.lastIndexOf('/') + 1);
-
-                // If we are on index.html, we want to go back to the directory root
                 const finalBase = repoBase.endsWith('index.html/') ? repoBase.replace('index.html/', '') : repoBase;
-
                 const newQuery = urlName.toLowerCase() === 'readme' ? '' : `?page=${urlName}`;
                 window.history.replaceState({ path }, null, finalBase + newQuery);
 
-                // Handle relative links inside the content
                 content.querySelectorAll('a').forEach(link => {
                     const href = link.getAttribute('href');
                     if (href && !href.startsWith('http') && !href.startsWith('#')) {
                         link.onclick = (e) => {
                             const isDoc = href.endsWith('.md') || !href.includes('.');
-                            if (!isDoc) return; // Let assets/other files load normally
-
+                            if (!isDoc) return;
                             e.preventDefault();
                             let targetPath = href;
-
-                            // Resolve relative paths if not absolute-in-repo
                             if (!href.startsWith('/')) {
                                 const currentDir = path.includes('/') ? path.substring(0, path.lastIndexOf('/') + 1) : '';
                                 targetPath = currentDir + href;
                             } else {
-                                targetPath = href.substring(1); // Remove leading slash for local loading
+                                targetPath = href.substring(1);
                             }
-
                             if (!targetPath.endsWith('.md') && !targetPath.includes('.')) targetPath += '.md';
                             loadFile(targetPath);
                         };
                     }
                 });
             } catch (err) {
-                content.innerHTML = `<h1>Error</h1><p>Failed to load ${path}. Ensure the file exists on the main branch.</p>`;
+                content.innerHTML = `<h1>Error</h1><p>Failed to load ${path}. Ensure the file exists and you have access.</p>`;
             }
         }
 
         function refreshActivity() {
             const year = document.getElementById('year-select').value;
             const type = document.getElementById('type-select').value;
+            const view = document.getElementById('view-select').value;
 
             let repoName;
             if (type === 'testbot') {
@@ -680,26 +836,68 @@
                 repoName = `FRC-${year}`;
             }
 
-            loadActivity(repoName);
+            loadActivity(repoName, view);
         }
 
-        async function loadActivity(repoName) {
+        async function loadActivity(repoName, view) {
             const feed = document.getElementById('activity-feed');
-            feed.innerHTML = `<div style="font-size: 0.8rem; padding: 12px 0; color: var(--text-dim);">Loading...</div>`;
+            feed.innerHTML = `<div style="font-size: 0.8rem; padding: 12px 0; color: var(--text-dim);">Loading ${view}...</div>`;
+
             try {
-                const url = `https://api.github.com/repos/${CONFIG.owner}/${repoName}/commits?per_page=5`;
-                const res = await fetch(url);
-                if (!res.ok) throw new Error("Commits not found");
-                const commits = await res.json();
-                feed.innerHTML = commits.map(c => `
-                    <div class="activity-item">
-                        <div class="activity-author">${c.commit.author.name}</div>
-                        <div class="activity-msg">${c.commit.message.split('\n')[0]}</div>
-                        <div class="activity-date">${new Date(c.commit.author.date).toLocaleDateString()}</div>
-                    </div>
-                `).join('');
+                let url;
+                if (view === 'commits') {
+                    url = `https://api.github.com/repos/${CONFIG.owner}/${repoName}/commits?per_page=10`;
+                } else if (view === 'issues') {
+                    url = `https://api.github.com/repos/${CONFIG.owner}/${repoName}/issues?state=open&per_page=10`;
+                } else if (view === 'pulls') {
+                    url = `https://api.github.com/repos/${CONFIG.owner}/${repoName}/pulls?state=open&per_page=10`;
+                }
+
+                const res = await fetch(url, { headers: getHeaders() });
+                if (!res.ok) throw new Error("Data not found");
+                const items = await res.json();
+
+                if (items.length === 0) {
+                    feed.innerHTML = `<p style="font-size: 0.8rem; color: var(--text-dim);">No ${view} found.</p>`;
+                    return;
+                }
+
+                feed.innerHTML = items.map(item => {
+                    if (view === 'commits') {
+                        return `
+                            <div class="activity-item">
+                                <div class="activity-author">${item.commit.author.name}</div>
+                                <div class="activity-msg"><a href="${item.html_url}" target="_blank" style="color: inherit; text-decoration: none;">${item.commit.message.split('\n')[0]}</a></div>
+                                <div class="activity-date">${new Date(item.commit.author.date).toLocaleDateString()}</div>
+                            </div>
+                        `;
+                    } else if (view === 'issues') {
+                        // GitHub issues API also returns PRs, filter them out if strictly looking for issues? 
+                        // Actually 'issues' endpoint includes PRs unless we filter. 
+                        // But usually the UI distinction helps. 
+                        // Start with basic render.
+                        if (item.pull_request) return ''; // Skip PRs in issues view if desired, but user might want everything. Let's keep distinct.
+
+                        return `
+                            <div class="activity-item">
+                                <div class="activity-author">#${item.number} ${item.user.login}</div>
+                                <div class="activity-msg"><a href="${item.html_url}" target="_blank" style="color: inherit; text-decoration: none;">${item.title}</a></div>
+                                <div class="activity-date">Comments: ${item.comments}</div>
+                            </div>
+                        `;
+                    } else if (view === 'pulls') {
+                        return `
+                            <div class="activity-item">
+                                <div class="activity-author">#${item.number} ${item.user.login}</div>
+                                <div class="activity-msg"><a href="${item.html_url}" target="_blank" style="color: inherit; text-decoration: none;">${item.title}</a></div>
+                                <div class="activity-date">State: ${item.state}</div>
+                            </div>
+                        `;
+                    }
+                }).join('');
+
             } catch (err) {
-                feed.innerHTML = `<p style="font-size: 0.8rem; color: #ff7b72;">No updates found for ${repoName}.</p>`;
+                feed.innerHTML = `<p style="font-size: 0.8rem; color: #ff7b72;">Failed to load ${view} for ${repoName}.</p>`;
             }
         }
 

@@ -47,7 +47,7 @@
             color: var(--text-main);
             height: 100vh;
             display: grid;
-            grid-template-columns: var(--sidebar-width) 1fr var(--aside-width);
+            grid-template-columns: var(--sidebar-width) 1fr;
             overflow: hidden;
         }
 
@@ -135,6 +135,44 @@
             box-shadow: var(--glow);
         }
 
+        /* Sidebar TOC */
+        .sidebar-toc {
+            display: none;
+            /* Hidden by default, shown when page is active */
+            flex-direction: column;
+            margin-top: 8px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 8px;
+        }
+
+        .sidebar-toc.active {
+            display: flex;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 6px 36px;
+            /* Indented more than nav links */
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 2px solid transparent;
+        }
+
+        .toc-link:hover {
+            color: var(--text-main);
+        }
+
+        .toc-link.active {
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+        }
+
+        .toc-h3 {
+            padding-left: 48px;
+            font-size: 0.8rem;
+        }
+
         /* Main Content area */
         main {
             padding: 40px;
@@ -143,8 +181,16 @@
         }
 
         #content {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            background: transparent;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+        }
+
+        /* Markdown Content Container - wrapper for md files */
+        .markdown-body {
             background: rgba(255, 255, 255, 0.02);
             padding: 48px;
             border-radius: 24px;
@@ -153,7 +199,7 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        #content h1 {
+        .markdown-body h1 {
             font-family: 'Outfit', sans-serif;
             font-size: 2.5rem;
             margin-top: 0;
@@ -161,14 +207,14 @@
             color: white;
         }
 
-        #content h2 {
+        .markdown-body h2 {
             border-bottom: 1px solid var(--glass-border);
             padding-bottom: 0.5rem;
             margin-top: 2rem;
             color: #fff;
         }
 
-        #content blockquote {
+        .markdown-body blockquote {
             border-left: 4px solid var(--accent-primary);
             padding: 1rem 2rem;
             margin: 2rem 0;
@@ -176,7 +222,7 @@
             border-radius: 0 12px 12px 0;
         }
 
-        #content code {
+        .markdown-body code {
             background: rgba(255, 255, 255, 0.1);
             padding: 0.2rem 0.4rem;
             border-radius: 4px;
@@ -184,62 +230,104 @@
             font-size: 0.9em;
         }
 
-        /* Right Sidebar activity/toc */
-        aside {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            border-left: 1px solid var(--glass-border);
-            padding: 32px 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
+        /* Dashboard Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
         }
 
-        .aside-section h2 {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+        .dash-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dash-card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            margin: 0 0 16px 0;
             color: var(--text-dim);
-            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .toc-link {
-            display: block;
-            padding: 6px 0;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.85rem;
+        /* Countdown Card */
+        .countdown-container {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
 
-        .toc-link:hover {
-            color: var(--accent-primary);
+        .countdown-container:hover {
+            transform: scale(1.02);
         }
 
-        .toc-h2 {
-            padding-left: 12px;
+        .countdown-timer {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 12px 0;
+            line-height: 1;
         }
 
-        .toc-h3 {
-            padding-left: 24px;
+        .countdown-label {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .countdown-link-hint {
             font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 12px;
+            opacity: 0.7;
         }
 
+        /* Activity Feed in Dashboard */
         .activity-item {
             padding: 12px 0;
             border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .activity-icon {
+            margin-top: 4px;
+            color: var(--text-dim);
+        }
+
+        .activity-content {
+            flex: 1;
         }
 
         .activity-author {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--accent-secondary);
         }
 
+        .activity-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+        }
+
         .activity-msg {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-main);
             margin: 4px 0;
         }
@@ -251,12 +339,23 @@
 
         /* Responsive */
         @media (max-width: 1200px) {
+            /* No longer relevant as we removed the 3rd column */
+        }
+
+        @media (max-width: 768px) {
             body {
-                grid-template-columns: 240px 1fr;
+                grid-template-columns: 1fr;
             }
 
-            aside {
-                display: none;
+            nav {
+                position: fixed;
+                transform: translateX(-100%);
+                width: 280px;
+                height: 100vh;
+            }
+
+            nav.open {
+                transform: translateX(0);
             }
         }
 
@@ -477,11 +576,25 @@
     <nav id="sidebar">
         <div class="nav-header">
             <div class="logo-circle"></div>
-            <h1>Start Guide</h1>
+            <h1 onclick="renderDashboard()" style="cursor: pointer;">Start Guide</h1>
         </div>
-        <div class="nav-group-title">Documentation</div>
+        <div class="nav-group-title">Navigation</div>
         <div id="page-list">
+            <a class="nav-link dashboard-link" onclick="renderDashboard()">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="opacity: 0.8;">
+                    <path
+                        d="M1 3a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V3zm2-1a1 1 0 00-1 1v1h12V3a1 1 0 00-1-1H3zm12 3H1v8a1 1 0 001 1h10a1 1 0 001-1V5z">
+                    </path>
+                </svg>
+                Dashboard
+            </a>
             <div class="nav-link">Loading files...</div>
+        </div>
+
+        <!-- Sidebar TOC Container -->
+        <div id="sidebar-toc-container" class="sidebar-toc">
+            <div class="nav-group-title">Table of Contents</div>
+            <div id="toc"></div>
         </div>
         <div class="nav-group-title">Actions</div>
         <div class="nav-link" onclick="sharePage()">
@@ -501,52 +614,15 @@
 
     <main>
         <div id="content">
-            <div style="text-align: center; padding-top: 100px;">
-                <div class="logo-circle" style="width: 60px; height: 60px; margin: 0 auto 24px;"></div>
-                <h1 style="font-family: 'Outfit';">Welcome to Team 5171</h1>
-                <p style="color: var(--text-dim); font-size: 1.1rem; max-width: 500px; margin: 0 auto;">
-                    We are initializing the workspace and fetching the latest guides. Please select a file from the
-                    sidebar to begin.
-                </p>
-            </div>
+            <!-- Dashboard Content -->
+            <div id="dashboard-container"></div>
+
+            <!-- Markdown Content -->
+            <div id="markdown-container" class="markdown-body" style="display: none;"></div>
         </div>
     </main>
 
-    <aside>
-        <div class="aside-section">
-            <h2><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-                    <path
-                        d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
-                    </path>
-                </svg> Table of Contents</h2>
-            <div id="toc"></div>
-        </div>
-        <div class="aside-section">
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-                <h2 style="margin: 0;"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                            d="M10.896 2H4.95A1.75 1.75 0 003.2 3.75v9.5c0 .966.784 1.75 1.75 1.75h6.926a1.75 1.75 0 001.75-1.75V3.75A1.75 1.75 0 0011.875 2h-.979zM5 3.5h5.875a.25.25 0 01.25.25v1.5a.25.25 0 01-.25.25H5a.25.25 0 01-.25-.25v-1.5A.25.25 0 015 3.5z">
-                        </path>
-                    </svg> Updates</h2>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <select id="year-select" class="config-select" onchange="refreshActivity()">
-                        <option value="2026" selected>2026</option>
-                        <option value="2025">2025</option>
-                    </select>
-                    <select id="type-select" class="config-select" onchange="refreshActivity()">
-                        <option value="FRC" selected>FRC</option>
-                        <option value="testbot">Test</option>
-                    </select>
-                    <select id="view-select" class="config-select" onchange="refreshActivity()">
-                        <option value="commits" selected>Commits</option>
-                        <option value="issues">Issues</option>
-                        <option value="pulls">PRs</option>
-                    </select>
-                </div>
-            </div>
-            <div id="activity-feed"></div>
-        </div>
-    </aside>
+
 
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal">
@@ -590,6 +666,7 @@
         const CONFIG = {
             owner: "team5171",
             repo: "2026docs",
+            activityRepo: "FRC-2026",
             branch: "main",
             defaultFile: "README.md",
             logo: "https://github.com/team5171.png",
@@ -636,7 +713,21 @@
             }
 
             try {
-                await Promise.all([loadFileList(), refreshActivity()]);
+                // If query param exists, load file, else render dashboard
+                const params = new URLSearchParams(window.location.search);
+                const requested = params.get('page') || params.get('') || (window.location.search.length > 1 ? window.location.search.substring(1) : null);
+
+                await loadFileList();
+
+                if (requested) {
+                    // loadFileList handles finding the file, but we need to trigger it if we act here? 
+                    // Actually loadFileList logic below does the finding. 
+                    // We just need to make sure we don't double render.
+                    // Let's modify loadFileList to handle the "default" case by calling renderDashboard if no match.
+                } else {
+                    renderDashboard();
+                }
+
             } catch (err) {
                 console.error("Initialization failed:", err);
             }
@@ -698,7 +789,12 @@
                     return;
                 }
 
-                container.innerHTML = files.map(file => {
+                container.innerHTML = `
+                    <a class="nav-link dashboard-link" onclick="renderDashboard()">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="opacity: 0.8;"><path d="M1 3a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V3zm2-1a1 1 0 00-1 1v1h12V3a1 1 0 00-1-1H3zm12 3H1v8a1 1 0 001 1h10a1 1 0 001-1V5z"></path></svg>
+                        Dashboard
+                    </a>
+                ` + files.map(file => {
                     const urlName = file.path.replace('.md', '');
                     const href = urlName.toLowerCase() === 'readme' ? './' : `?page=${urlName}`;
                     return `
@@ -721,6 +817,9 @@
                 if (target) {
                     const el = document.querySelector(`[data-path="${target.path}"]`);
                     loadFile(target.path, el);
+                } else {
+                    // No matching file and no default file found/requested -> Dashboard
+                    renderDashboard();
                 }
 
             } catch (err) {
@@ -740,8 +839,17 @@
 
         async function loadFile(path, element) {
             state.currentPath = path;
-            const content = document.getElementById('content');
+            // Hide Dashboard, Show Markdown
+            document.getElementById('dashboard-container').style.display = 'none';
+            const mdContainer = document.getElementById('markdown-container');
+            mdContainer.style.display = 'block';
+
+            // Hide Sidebar TOC initially (will be populated/shown by generateTOC)
+            document.getElementById('sidebar-toc-container').classList.remove('active');
+
+            // Clear active states
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
             if (element) {
                 element.classList.add('active');
             } else {
@@ -750,7 +858,7 @@
             }
 
             try {
-                content.innerHTML = `<div style="text-align: center; padding: 100px;">Loading content...</div>`;
+                mdContainer.innerHTML = `<div style="text-align: center; padding: 100px;">Loading content...</div>`;
 
                 // For raw content, we can try using the API to get content if it's private and raw.githubusercontent doesn't support auth via token in URL easily (it does via header but raw.githubusercontent is CORS strict sometimes).
                 // Better to use the API contents endpoint with Accept: application/vnd.github.v3.raw
@@ -766,7 +874,7 @@
                 if (!res.ok) throw new Error("Failed to load");
                 const text = await res.text();
 
-                content.innerHTML = marked.parse(text);
+                mdContainer.innerHTML = marked.parse(text);
 
                 // Fix relative asset paths - logic updated to use API for checking or just reconstruct raw URLs
                 // Note: Binary assets in private repos are tricky with simple img src. 
@@ -776,7 +884,7 @@
                 // Let's stick to the previous implementation for assets, but maybe prepend the raw base.
 
                 const currentDir = path.includes('/') ? path.substring(0, path.lastIndexOf('/') + 1) : '';
-                content.querySelectorAll('img, video, audio, source').forEach(el => {
+                mdContainer.querySelectorAll('img, video, audio, source').forEach(el => {
                     ['src', 'poster'].forEach(attr => {
                         const val = el.getAttribute(attr);
                         if (val && !val.startsWith('http') && !val.startsWith('/') && !val.startsWith('data:')) {
@@ -790,8 +898,8 @@
                     });
                 });
 
-                generateTOC(content);
-                content.parentElement.scrollTop = 0;
+                generateTOC(mdContainer);
+                document.querySelector('main').scrollTop = 0;
 
                 const urlName = path.replace('.md', '');
                 const cleanBase = window.location.pathname.split('?')[0].split('#')[0];
@@ -800,7 +908,7 @@
                 const newQuery = urlName.toLowerCase() === 'readme' ? '' : `?page=${urlName}`;
                 window.history.replaceState({ path }, null, finalBase + newQuery);
 
-                content.querySelectorAll('a').forEach(link => {
+                mdContainer.querySelectorAll('a').forEach(link => {
                     const href = link.getAttribute('href');
                     if (href && !href.startsWith('http') && !href.startsWith('#')) {
                         link.onclick = (e) => {
@@ -820,7 +928,7 @@
                     }
                 });
             } catch (err) {
-                content.innerHTML = `<h1>Error</h1><p>Failed to load ${path}. Ensure the file exists and you have access.</p>`;
+                mdContainer.innerHTML = `<h1>Error</h1><p>Failed to load ${path}. Ensure the file exists and you have access.</p>`;
             }
         }
 
@@ -901,15 +1009,18 @@
             }
         }
 
-        function generateTOC(container) {
-            const toc = document.getElementById('toc');
-            const headings = container.querySelectorAll('h1, h2, h3');
-            toc.innerHTML = '';
+        function generateTOC(contentElement) {
+            const tocContainer = document.getElementById('toc');
+            const sidebarToc = document.getElementById('sidebar-toc-container');
+            const headings = contentElement.querySelectorAll('h1, h2, h3');
+            tocContainer.innerHTML = '';
 
             if (headings.length === 0) {
-                toc.innerHTML = '<p style="color: var(--text-dim); font-size: 0.8rem;">No headings found.</p>';
+                sidebarToc.classList.remove('active');
                 return;
             }
+
+            sidebarToc.classList.add('active');
 
             headings.forEach((h, i) => {
                 const id = `heading-${i}`;
@@ -918,8 +1029,250 @@
                 a.href = `#${id}`;
                 a.className = `toc-link toc-${h.tagName.toLowerCase()}`;
                 a.textContent = h.textContent;
-                toc.appendChild(a);
+                a.onclick = (e) => {
+                    e.preventDefault();
+                    h.scrollIntoView({ behavior: 'smooth' });
+                    // Update active state manually
+                    document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                    a.classList.add('active');
+                };
+                tocContainer.appendChild(a);
             });
+        }
+
+        // --- Dashboard Logic ---
+
+        async function renderDashboard() {
+            state.currentPath = 'Dashboard';
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector('.dashboard-link')?.classList.add('active');
+
+            // Toggle containers
+            document.getElementById('markdown-container').style.display = 'none';
+            document.getElementById('sidebar-toc-container').classList.remove('active');
+            const dash = document.getElementById('dashboard-container');
+            dash.style.display = 'block';
+
+            dash.innerHTML = `
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div class="logo-circle" style="width: 80px; height: 80px; margin: 0 auto 16px;"></div>
+                    <h1 style="font-family: 'Outfit'; font-size: 2.5rem; margin: 0;">2026 Season Overview</h1>
+                    <p style="color: var(--text-dim);">Technical Hub for Team 5171</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Countdown Card -->
+                    <div class="dash-card" id="countdown-card">
+                        <h2>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4.75 0a.75.75 0 01.75.75V2h5V.75a.75.75 0 011.5 0V2h1.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0113.25 16H2.75A1.75 1.75 0 011 14.25V3.75C1 2.784 1.784 2 2.75 2H4V.75A.75.75 0 014.75 0zm0 3.5h8.5a.25.25 0 01.25.25V6h-9V3.75a.25.25 0 01.25-.25zM2.5 7.5v6.75c0 .138.112.25.25.25h10.5a.25.25 0 00.25-.25V7.5h-11z"></path></svg>
+                            Next Event
+                        </h2>
+                        <div id="countdown-ui">
+                            <div style="text-align: center; padding: 20px;">Loading Calendar...</div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Feed Card -->
+                    <div class="dash-card">
+                        <h2>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10.896 2H4.95A1.75 1.75 0 003.2 3.75v9.5c0 .966.784 1.75 1.75 1.75h6.926a1.75 1.75 0 001.75-1.75V3.75A1.75 1.75 0 0011.875 2h-.979zM5 3.5h5.875a.25.25 0 01.25.25v1.5a.25.25 0 01-.25.25H5a.25.25 0 01-.25-.25v-1.5A.25.25 0 015 3.5z"></path></svg>
+                            Team Updates
+                        </h2>
+                        <div id="activity-feed"></div> <!-- Re-using ID for compatibility -->
+                    </div>
+                </div>
+            `;
+
+            // Start Widgets
+            fetchICalData();
+            loadMergedActivity();
+        }
+
+        let countdownInterval;
+
+        async function fetchICalData() {
+            const container = document.getElementById('countdown-ui');
+            const card = document.getElementById('countdown-card');
+            const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api2.luma.com/ics/get?entity=calendar&id=cal-TNDo0jyDZ2iF1yJ');
+
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error("Failed to fetch calendar");
+                const text = await res.text();
+
+                const events = parseICS(text);
+                const nextEvent = getNextEvent(events);
+
+                if (nextEvent) {
+                    startCountdown(nextEvent, container, card);
+                } else {
+                    container.innerHTML = `<div style="text-align: center; color: var(--text-dim);">No upcoming events found.</div>`;
+                }
+
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<div style="text-align: center; color: #ff7b72;">
+                    Failed to load calendar (CORS).<br>
+                    <a href="https://lu.ma/team5171" target="_blank" style="color: var(--accent-primary); text-decoration: none;">View on Luma →</a>
+               </div>`;
+            }
+        }
+
+        async function loadMergedActivity() {
+            const feed = document.getElementById('activity-feed');
+            feed.innerHTML = `<div style="font-size: 0.8rem; padding: 12px 0; color: var(--text-dim);">Synchronizing data...</div>`;
+
+            try {
+                const [commits, issues, pulls] = await Promise.all([
+                    fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/commits?per_page=5`, { headers: getHeaders() }).then(res => res.json()),
+                    fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/issues?state=open&per_page=5`, { headers: getHeaders() }).then(res => res.json()),
+                    fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/pulls?state=open&per_page=5`, { headers: getHeaders() }).then(res => res.json())
+                ]);
+
+                let merged = [
+                    ...commits.map(c => ({
+                        type: 'commit',
+                        date: new Date(c.commit.author.date),
+                        author: c.commit.author.name,
+                        avatar: c.author?.avatar_url || CONFIG.logo,
+                        msg: c.commit.message.split('\n')[0],
+                        url: c.html_url
+                    })),
+                    ...issues.filter(i => !i.pull_request).map(i => ({
+                        type: 'issue',
+                        date: new Date(i.created_at),
+                        author: i.user.login,
+                        avatar: i.user.avatar_url,
+                        msg: `Issue #${i.number}: ${i.title}`,
+                        url: i.html_url
+                    })),
+                    ...pulls.map(p => ({
+                        type: 'pr',
+                        date: new Date(p.created_at),
+                        author: p.user.login,
+                        avatar: p.user.avatar_url,
+                        msg: `PR #${p.number}: ${p.title}`,
+                        url: p.html_url
+                    }))
+                ].sort((a, b) => b.date - a.date).slice(0, 10);
+
+                if (merged.length === 0) {
+                    feed.innerHTML = `<p style="font-size: 0.8rem; color: var(--text-dim);">No recent activity found.</p>`;
+                    return;
+                }
+
+                feed.innerHTML = merged.map(item => `
+                    <div class="activity-item" onclick="window.open('${item.url}', '_blank')" style="cursor: pointer;">
+                        <img src="${item.avatar}" class="activity-avatar" alt="${item.author}">
+                        <div class="activity-content">
+                            <div class="activity-author">${item.author}</div>
+                            <div class="activity-msg">${item.msg}</div>
+                            <div class="activity-date">${item.date.toLocaleDateString()} at ${item.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                feed.innerHTML = `<p style="font-size: 0.8rem; color: #ff7b72;">Failed to sync activity feed.</p>`;
+            }
+        }
+
+        function parseICS(icsData) {
+            const events = [];
+            const lines = icsData.split(/\r\n|\n|\r/);
+            let currentEvent = null;
+
+            for (const line of lines) {
+                if (line.startsWith('BEGIN:VEVENT')) {
+                    currentEvent = {};
+                } else if (line.startsWith('END:VEVENT')) {
+                    if (currentEvent) events.push(currentEvent);
+                    currentEvent = null;
+                } else if (currentEvent) {
+                    const [key, ...valueParts] = line.split(':');
+                    const value = valueParts.join(':');
+                    if (key && value) {
+                        // Handle multiline descriptions? Simple parser for now.
+                        // Ideally checking for DESCRIPTION and DTSTART
+                        if (key.includes('DTSTART')) currentEvent.start = value;
+                        if (key.includes('SUMMARY')) currentEvent.summary = value;
+                        if (key.includes('DESCRIPTION')) currentEvent.description = value; // Might need to handle line folding
+                    }
+                }
+            }
+            return events;
+        }
+
+        function getNextEvent(events) {
+            const now = new Date();
+            const futureEvents = events.map(e => {
+                // Parse date: YYYYMMDDTHHMMSSZ or YYYYMMDD
+                // Simple parser needed
+                const dStr = e.start;
+                if (!dStr) return null;
+
+                let date;
+                // Handle basic ISO format from ICS
+                if (dStr.length === 8) { // YYYYMMDD
+                    const y = dStr.substring(0, 4), m = dStr.substring(4, 6), d = dStr.substring(6, 8);
+                    date = new Date(`${y}-${m}-${d}`);
+                } else { // YYYYMMDDTHHMMSS...
+                    const y = dStr.substring(0, 4), m = dStr.substring(4, 6), d = dStr.substring(6, 8);
+                    const h = dStr.substring(9, 11), min = dStr.substring(11, 13), s = dStr.substring(13, 15);
+                    // Assuming UTC if ends in Z
+                    if (dStr.endsWith('Z')) {
+                        date = new Date(Date.UTC(y, m - 1, d, h, min, s));
+                    } else {
+                        date = new Date(y, m - 1, d, h, min, s);
+                    }
+                }
+
+                return { ...e, date };
+            }).filter(e => e && e.date > now).sort((a, b) => a.date - b.date);
+
+            return futureEvents[0];
+        }
+
+        function startCountdown(event, container, card) {
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            // Extract URL
+            // Regex: Get up-to-date information at:\s*(https?://[^\s]+)
+            // Note: Description might be escaped in ICS (e.g. \\n).
+            const desc = event.description || "";
+            const urlMatch = desc.match(/Get up-to-date information at:\\?[n\s]*(https?:\/\/[^\s\\]+)/) || desc.match(/(https?:\/\/[^\s]+)/);
+            const targetUrl = urlMatch ? urlMatch[1] : null;
+
+            if (targetUrl) {
+                card.onclick = () => window.open(targetUrl, '_blank');
+                container.innerHTML += `<div class="countdown-link-hint">Click to view event details</div>`;
+            }
+
+            const update = () => {
+                const now = new Date().getTime();
+                const distance = event.date.getTime() - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    container.innerHTML = "Event Started!";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                container.innerHTML = `
+                    <div class="countdown-label">Next Event: ${event.summary}</div>
+                    <div class="countdown-timer">${days}d ${hours}h ${minutes}m ${seconds}s</div>
+                    <div class="app-date">${event.date.toLocaleDateString()} at ${event.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    ${targetUrl ? '<div class="countdown-link-hint">Click for details</div>' : ''}
+                `;
+            };
+
+            update();
+            countdownInterval = setInterval(update, 1000);
         }
 
         // Mobile Sidebar Toggle

@@ -689,44 +689,44 @@
             return state.pat ? { 'Authorization': `token ${state.pat}` } : {};
         }
 
+        if (!state.pat) {
+            console.warn("GitHub features locked (no auth)");
+        }
 
         async function init() {
-            // Check Local Storage
+            let hasAuth = false;
+
             if (state.pat) {
+                hasAuth = true;
                 document.getElementById('auth-overlay').style.display = 'none';
             }
-            // Try Auto-Auth (if configured)
             else if (CONFIG.authWorker && ENABLE_AUTO_AUTH) {
                 const autoToken = await tryAutoAuth();
                 if (autoToken) {
                     state.pat = autoToken;
                     localStorage.setItem('gh_pat', autoToken);
+                    hasAuth = true;
                     document.getElementById('auth-overlay').style.display = 'none';
                 } else {
                     document.getElementById('auth-overlay').style.display = 'flex';
-                    return;
                 }
             }
-
-            // Fallback to Overlay
             else {
                 document.getElementById('auth-overlay').style.display = 'flex';
-                return;
             }
 
+            // 🔓 APP ALWAYS CONTINUES
             try {
-                // If query param exists, load file, else render dashboard
                 const params = new URLSearchParams(window.location.search);
-                const requested = params.get('page') || params.get('') || (window.location.search.length > 1 ? window.location.search.substring(1) : null);
+                const requested =
+                    params.get('page') ||
+                    (window.location.search.length > 1
+                        ? window.location.search.substring(1)
+                        : null);
 
-                await loadFileList();
+                await loadFileList(hasAuth); // optional flag if needed
 
-                if (requested) {
-                    // loadFileList handles finding the file, but we need to trigger it if we act here? 
-                    // Actually loadFileList logic below does the finding. 
-                    // We just need to make sure we don't double render.
-                    // Let's modify loadFileList to handle the "default" case by calling renderDashboard if no match.
-                } else {
+                if (!requested) {
                     renderDashboard();
                 }
 

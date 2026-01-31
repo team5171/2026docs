@@ -1,6 +1,6 @@
 # Team 5171 - Software Development Hub 2026
+---
 __Version:__ 2026.1.26.1
-__Kiwi Docs Version:__ 2026.1.30.1
 
 Welcome to the digital nervous system of Team 5171! Whether you're here to write your first line of Java or you're a seasoned pro optimizing swerve drive paths, you've come to the right place.
 

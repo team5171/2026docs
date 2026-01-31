@@ -533,42 +533,6 @@
             color: var(--accent-primary);
             font-weight: 600;
         }
-
-        /* Auth Overlay */
-        .auth-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #090b0f;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .auth-box {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(88, 166, 255, 0.1);
-        }
-
-        .auth-box h2 {
-            margin-top: 0;
-            font-family: 'Outfit', sans-serif;
-            color: white;
-        }
-
-        .auth-box p {
-            color: var(--text-dim);
-            margin-bottom: 24px;
-        }
     </style>
 </head>
 
@@ -636,29 +600,7 @@
         </div>
     </div>
 
-    <!-- Auth Overlay -->
-    <div id="auth-overlay" class="auth-overlay">
-        <div class="auth-box" id="auth-step-1">
-            <div class="logo-circle" style="width: 48px; height: 48px; margin: 0 auto 16px;"></div>
-            <h2>Security Check</h2>
-            <p>To access internal documentation, please verify your identity.</p>
-            <input type="text" id="mascot-input" placeholder="What is our mascot?">
-            <button class="btn btn-primary" style="width: 100%;" onclick="checkMascot()">Verify</button>
-            <div id="auth-error-1" style="color: #ff7b72; font-size: 0.8rem; margin-top: 12px; display: none;">
-                Incorrect. Try again.</div>
-        </div>
 
-        <div class="auth-box" id="auth-step-2" style="display: none;">
-            <div class="logo-circle" style="width: 48px; height: 48px; margin: 0 auto 16px;"></div>
-            <h2>Enter Access Token</h2>
-            <p>Please enter your GitHub Personal Access Token (PAT) to view secure content.</p>
-            <input type="password" id="pat-input" placeholder="ghp_...">
-            <button class="btn btn-primary" style="width: 100%;" onclick="savePat()">Access Docs</button>
-            <div style="margin-top: 16px; font-size: 0.75rem; color: var(--text-dim);">
-                Token is stored locally in your browser and never sent to our servers.
-            </div>
-        </div>
-    </div>
 
     <div id="toast">Link copied to clipboard!</div>
 
@@ -673,11 +615,8 @@
             baseUrl: "https://team5171.github.io/2026docs",
             authWorker: "https://team5171pat.veerbajaj11.workers.dev" // Enter your Worker URL here (e.g., https://auth.team5171.workers.dev)
         };
-        const ENABLE_AUTO_AUTH = false;
-
         const state = {
-            currentPath: CONFIG.defaultFile,
-            pat: localStorage.getItem('gh_pat') || null
+            currentPath: CONFIG.defaultFile
         };
 
         const ENDPOINTS = {
@@ -686,36 +625,10 @@
         };
 
         function getHeaders() {
-            return state.pat ? { 'Authorization': `token ${state.pat}` } : {};
-        }
-
-        if (!state.pat) {
-            console.warn("GitHub features locked (no auth)");
+            return {};
         }
 
         async function init() {
-            let hasAuth = false;
-
-            if (state.pat) {
-                hasAuth = true;
-                document.getElementById('auth-overlay').style.display = 'none';
-            }
-            else if (CONFIG.authWorker && ENABLE_AUTO_AUTH) {
-                const autoToken = await tryAutoAuth();
-                if (autoToken) {
-                    state.pat = autoToken;
-                    localStorage.setItem('gh_pat', autoToken);
-                    hasAuth = true;
-                    document.getElementById('auth-overlay').style.display = 'none';
-                } else {
-                    document.getElementById('auth-overlay').style.display = 'flex';
-                }
-            }
-            else {
-                document.getElementById('auth-overlay').style.display = 'flex';
-            }
-
-            // 🔓 APP ALWAYS CONTINUES
             try {
                 const params = new URLSearchParams(window.location.search);
                 const requested =
@@ -724,7 +637,7 @@
                         ? window.location.search.substring(1)
                         : null);
 
-                await loadFileList(hasAuth); // optional flag if needed
+                await loadFileList();
 
                 if (!requested) {
                     renderDashboard();
@@ -735,46 +648,7 @@
             }
         }
 
-        // Auth Functions
-        async function tryAutoAuth() {
-            try {
-                // Determine if we are on the correct origin to avoid unnecessary errors
-                // However, the worker handles the origin check, so we can just try.
-                const res = await fetch(CONFIG.authWorker);
-                if (res.ok) {
-                    const data = await res.json();
-                    return data.token;
-                }
-            } catch (err) {
-                console.log("Auto-auth skipped or failed.");
-            }
-            return null;
-        }
 
-        function checkMascot() {
-            const input = document.getElementById('mascot-input').value.trim().toLowerCase();
-            const error = document.getElementById('auth-error-1');
-
-            if (input === 'falcons') {
-                document.getElementById('auth-step-1').style.display = 'none';
-                document.getElementById('auth-step-2').style.display = 'block';
-                error.style.display = 'none';
-            } else {
-                error.style.display = 'block';
-                document.getElementById('mascot-input').classList.add('shake');
-                setTimeout(() => document.getElementById('mascot-input').classList.remove('shake'), 500);
-            }
-        }
-
-        function savePat() {
-            const token = document.getElementById('pat-input').value.trim();
-            if (token) {
-                localStorage.setItem('gh_pat', token);
-                state.pat = token;
-                document.getElementById('auth-overlay').style.display = 'none';
-                init();
-            }
-        }
 
         async function loadFileList() {
             const container = document.getElementById('page-list');
@@ -825,13 +699,6 @@
                 }
 
             } catch (err) {
-                if (err.message === "Unauthorized") {
-                    // Clear PAT and re-auth if token is bad
-                    localStorage.removeItem('gh_pat');
-                    state.pat = null;
-                    init(); // Will trigger auth overlay
-                    return;
-                }
                 container.innerHTML = `<div style="padding: 24px; font-size: 0.8rem; color: #ff7b72;">
                     Failed to connect to GitHub.<br>
                     Verify <strong>${CONFIG.owner}/${CONFIG.repo}</strong> is accessible.

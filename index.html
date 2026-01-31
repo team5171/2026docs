@@ -673,6 +673,7 @@
             baseUrl: "https://team5171.github.io/2026docs",
             authWorker: "https://team5171pat.veerbajaj11.workers.dev" // Enter your Worker URL here (e.g., https://auth.team5171.workers.dev)
         };
+        const ENABLE_AUTO_AUTH = false;
 
         const state = {
             currentPath: CONFIG.defaultFile,
@@ -695,7 +696,7 @@
                 document.getElementById('auth-overlay').style.display = 'none';
             }
             // Try Auto-Auth (if configured)
-            else if (CONFIG.authWorker) {
+            else if (CONFIG.authWorker && ENABLE_AUTO_AUTH) {
                 const autoToken = await tryAutoAuth();
                 if (autoToken) {
                     state.pat = autoToken;
@@ -706,6 +707,7 @@
                     return;
                 }
             }
+
             // Fallback to Overlay
             else {
                 document.getElementById('auth-overlay').style.display = 'flex';

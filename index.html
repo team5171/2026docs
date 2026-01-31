@@ -1093,7 +1093,8 @@
         async function fetchICalData() {
             const container = document.getElementById('countdown-ui');
             const card = document.getElementById('countdown-card');
-            const url = 'https://corsproxy.io/?' + encodeURIComponent('https://api2.luma.com/ics/get?entity=calendar&id=cal-TNDo0jyDZ2iF1yJ');
+            const url = `${CONFIG.authWorker}/calendar`;
+
 
             try {
                 const res = await fetch(url);

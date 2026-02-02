@@ -621,7 +621,12 @@
         // --- AUTH ---
         async function getHeaders() {
             try {
-                const res = await fetch(CONFIG.authWorker);
+                // Fix: append /pat to get the token, otherwise we get "OK" from root
+                const res = await fetch(`${CONFIG.authWorker}/pat`);
+                if (!res.ok) {
+                    console.error(`Auth Worker failed: ${res.status} ${res.statusText}`);
+                    return { 'Accept': 'application/vnd.github+json' };
+                }
                 const data = await res.json();
                 return {
                     'Authorization': `token ${data.token}`,
@@ -691,12 +696,21 @@
             try {
                 mdContainer.innerHTML = `<div style="text-align:center;padding:100px;">Loading content...</div>`;
                 const headers = await getHeaders();
-                const res = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}?ref=${CONFIG.branch}`, {
-                    headers,
-                    'Accept': 'application/vnd.github.v3.raw'
+                // 1. Get metadata (JSON) to find the raw download URL
+                const metaRes = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}?ref=${CONFIG.branch}`, {
+                    headers
                 });
-                if (!res.ok) throw new Error("Failed to load file");
-                const text = await res.text();
+
+                if (!metaRes.ok) throw new Error("Failed to load file metadata");
+                const metaData = await metaRes.json();
+
+                // 2. Fetch the actual content using the download_url
+                if (!metaData.download_url) throw new Error("No download_url found");
+
+                const contentRes = await fetch(metaData.download_url);
+                if (!contentRes.ok) throw new Error("Failed to load file content");
+
+                const text = await contentRes.text();
                 mdContainer.innerHTML = marked.parse(text);
 
                 // Fix relative assets
@@ -794,19 +808,38 @@
             feed.innerHTML = `<div style="font-size:0.8rem;padding:12px 0;color:var(--text-dim)">Synchronizing data...</div>`;
             try {
                 const headers = await getHeaders();
+                // Check if we have a token (simple check: if Authorization header is present)
+                if (!headers.Authorization) {
+                    console.warn("No Auth token available. Private repos will 404.");
+                }
+
+                const fetchRepoResource = async (resource) => {
+                    const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/${resource}`;
+                    const res = await fetch(url, { headers });
+                    if (!res.ok) {
+                        console.error(`Failed to fetch ${resource}: ${res.status} ${res.statusText}`);
+                        // Return empty array on failure to avoid crashing Promise.all
+                        return [];
+                    }
+                    return res.json();
+                };
+
                 const [commits, issues, pulls] = await Promise.all([
-                    fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/commits?per_page=5`, { headers }).then(r => r.json()),
-                    fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/issues?state=open&per_page=5`, { headers }).then(r => r.json()),
-                    fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/pulls?state=open&per_page=5`, { headers }).then(r => r.json())
+                    fetchRepoResource('commits?per_page=5'),
+                    fetchRepoResource('issues?state=open&per_page=5'),
+                    fetchRepoResource('pulls?state=open&per_page=5')
                 ]);
 
                 let merged = [
-                    ...commits.map(c => ({ type: 'commit', date: new Date(c.commit.author.date), author: c.commit.author.name, avatar: c.author?.avatar_url || CONFIG.logo, msg: c.commit.message.split('\n')[0], url: c.html_url })),
-                    ...issues.filter(i => !i.pull_request).map(i => ({ type: 'issue', date: new Date(i.created_at), author: i.user.login, avatar: i.user.avatar_url, msg: `Issue #${i.number}: ${i.title}`, url: i.html_url })),
-                    ...pulls.map(p => ({ type: 'pr', date: new Date(p.created_at), author: p.user.login, avatar: p.user.avatar_url, msg: `PR #${p.number}: ${p.title}`, url: p.html_url }))
+                    ...(Array.isArray(commits) ? commits : []).map(c => ({ type: 'commit', date: new Date(c.commit.author.date), author: c.commit.author.name, avatar: c.author?.avatar_url || CONFIG.logo, msg: c.commit.message.split('\n')[0], url: c.html_url })),
+                    ...(Array.isArray(issues) ? issues : []).filter(i => !i.pull_request).map(i => ({ type: 'issue', date: new Date(i.created_at), author: i.user.login, avatar: i.user.avatar_url, msg: `Issue #${i.number}: ${i.title}`, url: i.html_url })),
+                    ...(Array.isArray(pulls) ? pulls : []).map(p => ({ type: 'pr', date: new Date(p.created_at), author: p.user.login, avatar: p.user.avatar_url, msg: `PR #${p.number}: ${p.title}`, url: p.html_url }))
                 ].sort((a, b) => b.date - a.date).slice(0, 10);
 
-                if (merged.length === 0) { feed.innerHTML = `<p style="font-size:0.8rem;color:var(--text-dim)">No recent activity found.</p>`; return; }
+                if (merged.length === 0) {
+                    feed.innerHTML = `<p style="font-size:0.8rem;color:var(--text-dim)">No recent activity found (or access denied).</p>`;
+                    return;
+                }
 
                 feed.innerHTML = merged.map(item => `
             <div class="activity-item" onclick="window.open('${item.url}','_blank')" style="cursor:pointer">
@@ -819,7 +852,8 @@
             </div>
         `).join('');
             } catch (err) {
-                feed.innerHTML = `<p style="font-size:0.8rem;color:#ff7b72">Failed to sync activity feed.</p>`;
+                console.error("Critical error syncing activity feed:", err);
+                feed.innerHTML = `<p style="font-size:0.8rem;color:#ff7b72">Failed to sync activity feed. Check console.</p>`;
             }
         }
 

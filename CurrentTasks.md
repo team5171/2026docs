@@ -1,3 +1,23 @@
+# February 4, 2026
+
+We have finished coding the **Differential Drive on FlatBot**. We also have a Shooter subsystem (for more info on commands and subsystems, click [here](https://docs.wpilib.org/en/stable/docs/software/commandbased/what-is-command-based.html#subsystems-and-commands)) that allows us to shoot with two motors (a flywheel and a feeder) to load and shoot balls. We can pass a designated **RPM** (thanks to Asher) and use that to launch fuel at a certain distance.
+
+As far as our *FRC robot*, we will be using **Sverve Drive**, similar to Mantis.
+The differences (to my understanding, ask **Mentor Kevin**):
+||Swerve  | Differential |Tank |
+|--|--|--|--|
+|Controls  | Left Joystick: Glide fwd, bkwd, and left and right. Right joystick: **Turn** orientation left/right. |Control FWD backward with left y, and Left Right orentation with x | Use left/right for left right motors (as in both joysticks fwd -> fwd)|
+|Motors  | One for orentation of wheel, one for driving. | Driving| Driving|
+|Motors Type | SparkFlex | SparkMax| SparkMax|
+---
+So we will be working on a new `swervedrive/SwerveModule.java` file.
+**PLEASE** edit this file with the Edit in GitHub button, and add your name!
+
+- Veer
+
+
+
+
 # January 26, 2026
 
 Download WPILib and make sure you read these:

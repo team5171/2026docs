@@ -13,10 +13,12 @@ The differences (to my understanding, ask **Mentor Kevin**):
 So we will be working on a new `swervedrive/SwerveModule.java` file.
 **PLEASE** edit this file with the Edit in GitHub button, and add your name!
 
-- Veer
-- Worked on adding support for the Spark Flex Sim
+-Veer
 
 
+Worked on adding support for the Spark Flex Simulator: [Commit](https://github.com/team5171/FRC-2026/commit/4d41f088a4a777ad2532d058392418ff0ac841a7)
+
+-Asher
 
 
 # January 26, 2026

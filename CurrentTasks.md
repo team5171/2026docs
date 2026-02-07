@@ -1,3 +1,16 @@
+# February 6, 2026
+(transcript)
+OK, here's a summary that we did. We worked on the simulator and got it working. We also worked on. Let's see work on getting a simulator working. I basically we basically sat and learned like a ton of concepts and then he also gave us a list of stuff to work on tomorrow we actually might be able to physically test it tomorrow depending on how things work out. I'm gonna be coming in the afternoon. But we will have to see what it's like they've made some pretty significant progress on the actual, but it looks really good. Pretty sleep too. See ya. See you tomorrow.
+
+### Recording
+
+<audio controls>
+  <source src="game/prog/2-6-26.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+
+-Veer, Asher
+
 # February 4, 2026
 
 We have finished coding the **Differential Drive on FlatBot**. We also have a Shooter subsystem (for more info on commands and subsystems, click [here](https://docs.wpilib.org/en/stable/docs/software/commandbased/what-is-command-based.html#subsystems-and-commands)) that allows us to shoot with two motors (a flywheel and a feeder) to load and shoot balls. We can pass a designated **RPM** (thanks to Asher) and use that to launch fuel at a certain distance.

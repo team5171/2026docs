@@ -5,7 +5,7 @@ OK, here's a summary that we did. We worked on the simulator and got it working.
 ### Recording
 
 <audio controls>
-  <source src="game/prog/2-6-26.mp3" type="audio/mp3">
+  <source src="attachments/prog/2-6-26.mp3" type="audio/mp3">
   Your browser does not support the audio element.
 </audio>
 

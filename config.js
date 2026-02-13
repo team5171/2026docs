@@ -54,17 +54,17 @@ const CONFIG = {
 
     // Branding
     branding: {
-        title: "Kiwi Docs", // Window title
-        shortTitle: "Kiwi Docs",         // Sidebar title
-        logo: "https://github.com/kiwidocs.png",
-        welcomeTitle: "Welcome to Kiwi Docs",
+        title: "Team 5171", // Window title
+        shortTitle: "5171",         // Sidebar title
+        logo: "https://github.com/team5171.png",
+        welcomeTitle: "Welcome to Team 5171",
         welcomeText: "We are initializing the workspace and fetching the latest guides. Please select a file from the sidebar to begin."
     },
 
     // Footer Info
     footer: {
         creator: "Veer Bajaj",
-        organization: "Kiwi Docs", // If none use Kiwi Docs
+        organization: "Team 5171", // If none use Kiwi Docs
         version: "Kiwi Docs v2.2.0"
     },
 

@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard | Team 5171</title>
-    <!-- Google Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -21,29 +21,24 @@
             --accent-secondary: #bc8cff;
             --text-main: #e6edf3;
             --text-dim: #8b949e;
-            --glow: 0 0 20px rgba(88, 166, 255, 0.15);
+            --glow: 0 0 20px rgba(88, 166, 255, .15);
         }
 
         * {
-            box-sizing: border-box;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-sizing: border-box
         }
 
         body {
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-family: Inter, system-ui;
             margin: 0;
-            padding: 0;
-            background: transparent;
             color: var(--text-main);
-            overflow-x: hidden;
+            background: transparent;
         }
 
-        /* Dashboard Styles */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
-            margin-top: 24px;
         }
 
         .dash-card {
@@ -51,305 +46,207 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 24px;
-            position: relative;
-            overflow: hidden;
         }
 
-        .dash-card h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.2rem;
-            margin: 0 0 16px 0;
+        h2 {
+            font-family: Outfit;
+            font-size: 1.1rem;
             color: var(--text-dim);
+            letter-spacing: .05em;
+            margin: 0 0 16px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .logo-circle {
-            width: 32px;
-            height: 32px;
-            background-image: url('https://github.com/team5171.png');
-            background-size: cover;
-            background-position: center;
-            border-radius: 8px;
-            box-shadow: var(--glow);
-        }
-
-        /* Countdown Card */
-        .countdown-container {
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .countdown-container:hover {
-            transform: scale(1.02);
-        }
-
-        .countdown-timer {
-            font-family: 'Outfit', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 12px 0;
-            line-height: 1;
-        }
-
-        .countdown-label {
-            font-size: 1rem;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-
-        .countdown-link-hint {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            margin-top: 12px;
-            opacity: 0.7;
-        }
-
-        /* Activity Feed */
         .activity-item {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--glass-border);
             display: flex;
             gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
             align-items: flex-start;
         }
 
         .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-author {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--accent-secondary);
+            border-bottom: none
         }
 
         .activity-avatar {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             border: 1px solid var(--glass-border);
         }
 
+        .activity-author {
+            font-weight: 600;
+            color: var(--accent-secondary)
+        }
+
         .activity-msg {
-            font-size: 0.9rem;
-            color: var(--text-main);
-            margin: 4px 0;
+            font-size: .9rem;
+            margin: 3px 0
         }
 
         .activity-date {
-            font-size: 0.75rem;
-            color: var(--text-dim);
+            font-size: .75rem;
+            color: var(--text-dim)
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .countdown-timer {
+            font-family: Outfit;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            color: white;
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: url('https://github.com/team5171.png') center/cover;
+            margin: 0 auto 12px;
+            box-shadow: var(--glow);
         }
     </style>
 </head>
 
 <body>
-    <div style="text-align:center;margin-bottom:40px;">
-        <div class="logo-circle" style="width:80px;height:80px;margin:0 auto 16px;"></div>
-        <h1 style="font-size:2.5rem;margin:0;">2026 Season Overview</h1>
-        <p style="color:var(--text-dim);">Technical Hub for Team 5171</p>
+
+    <div style="text-align:center;margin:40px 0">
+        <div class="logo"></div>
+        <h1 style="font-family:Outfit;margin:0">2026 Season Overview</h1>
+        <p style="color:var(--text-dim)">Technical Hub</p>
     </div>
 
     <div class="dashboard-grid">
+
         <div class="dash-card" id="countdown-card">
             <h2>Next Event</h2>
-            <div id="countdown-ui" style="text-align:center;padding:20px;">Loading Calendar...</div>
+            <div id="countdown-ui">Loading calendar…</div>
         </div>
+
         <div class="dash-card">
             <h2>Team Updates</h2>
-            <div id="activity-feed"></div>
+            <div id="activity-feed">Syncing…</div>
         </div>
+
+        <div class="dash-card">
+            <h2>Top Contributors</h2>
+            <div id="contributors">Analyzing commits…</div>
+        </div>
+
     </div>
 
     <script>
         const CONFIG = {
             owner: "team5171",
-            activityRepo: "FRC-2026",
-            logo: "https://github.com/team5171.png",
+            repo: "FRC-2026",
             authWorker: "https://team5171pat.veerbajaj11.workers.dev"
         };
 
-        // --- AUTH ---
+        // ---------- AUTH ----------
         async function getHeaders() {
-            try {
-                const res = await fetch(`${CONFIG.authWorker}/pat`);
-                if (!res.ok) {
-                    console.error(`Auth Worker failed: ${res.status} ${res.statusText}`);
-                    return { 'Accept': 'application/vnd.github+json' };
-                }
-                const data = await res.json();
-                return {
-                    'Authorization': `token ${data.token}`,
-                    'Accept': 'application/vnd.github+json'
-                };
-            } catch (err) {
-                console.error("Failed to fetch token from Worker:", err);
-                return { 'Accept': 'application/vnd.github+json' };
-            }
-        }
-
-        // --- MERGED ACTIVITY ---
-        async function loadMergedActivity() {
-            const feed = document.getElementById('activity-feed');
-            feed.innerHTML = `<div style="font-size:0.8rem;padding:12px 0;color:var(--text-dim)">Synchronizing data...</div>`;
-            try {
-                const headers = await getHeaders();
-                if (!headers.Authorization) {
-                    console.warn("No Auth token available. Private repos will 404.");
-                }
-
-                const fetchRepoResource = async (resource) => {
-                    const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/${resource}`;
-                    const res = await fetch(url, { headers });
-                    if (!res.ok) {
-                        console.error(`Failed to fetch ${resource}: ${res.status} ${res.statusText}`);
-                        return [];
-                    }
-                    return res.json();
-                };
-
-                const [commits, issues, pulls] = await Promise.all([
-                    fetchRepoResource('commits?per_page=5'),
-                    fetchRepoResource('issues?state=open&per_page=5'),
-                    fetchRepoResource('pulls?state=open&per_page=5')
-                ]);
-
-                let merged = [
-                    ...(Array.isArray(commits) ? commits : []).map(c => ({ type: 'commit', date: new Date(c.commit.author.date), author: c.commit.author.name, avatar: c.author?.avatar_url || CONFIG.logo, msg: c.commit.message.split('\n')[0], url: c.html_url })),
-                    ...(Array.isArray(issues) ? issues : []).filter(i => !i.pull_request).map(i => ({ type: 'issue', date: new Date(i.created_at), author: i.user.login, avatar: i.user.avatar_url, msg: `Issue #${i.number}: ${i.title}`, url: i.html_url })),
-                    ...(Array.isArray(pulls) ? pulls : []).map(p => ({ type: 'pr', date: new Date(p.created_at), author: p.user.login, avatar: p.user.avatar_url, msg: `PR #${p.number}: ${p.title}`, url: p.html_url }))
-                ].sort((a, b) => b.date - a.date).slice(0, 10);
-
-                if (merged.length === 0) {
-                    feed.innerHTML = `<p style="font-size:0.8rem;color:var(--text-dim)">No recent activity found (or access denied).</p>`;
-                    return;
-                }
-
-                feed.innerHTML = merged.map(item => `
-                    <div class="activity-item" onclick="window.open('${item.url}','_blank')" style="cursor:pointer">
-                        <img src="${item.avatar}" class="activity-avatar" alt="${item.author}">
-                        <div class="activity-content">
-                            <div class="activity-author">${item.author}</div>
-                            <div class="activity-msg">${item.msg}</div>
-                            <div class="activity-date">${item.date.toLocaleDateString()} at ${item.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (err) {
-                console.error("Critical error syncing activity feed:", err);
-                feed.innerHTML = `<p style="font-size:0.8rem;color:#ff7b72">Failed to sync activity feed. Check console.</p>`;
-            }
-        }
-
-        // --- CALENDAR & COUNTDOWN ---
-        async function fetchICalData() {
-            const container = document.getElementById('countdown-ui');
-            const card = document.getElementById('countdown-card');
-            try {
-                const res = await fetch(`${CONFIG.authWorker}/calendar`);
-                if (!res.ok) throw new Error("Failed to fetch calendar");
-                const text = await res.text();
-                const events = parseICS(text);
-                const nextEvent = getNextEvent(events);
-                if (nextEvent) startCountdown(nextEvent, container, card);
-                else container.innerHTML = `<div style="text-align:center;color:var(--text-dim)">No upcoming events found.</div>`;
-            } catch (err) {
-                container.innerHTML = `<div style="text-align:center;color:#ff7b72">Failed to load calendar.<br><a href="https://lu.ma/team5171" target="_blank" style="color:var(--accent-primary)">View on Luma →</a></div>`;
-            }
-        }
-
-        // --- ICS PARSING & COUNTDOWN ---
-        function parseICS(icsData) {
-            const events = []; const lines = icsData.split(/\r\n|\n|\r/); let currentEvent = null;
-            for (const line of lines) {
-                if (line.startsWith('BEGIN:VEVENT')) currentEvent = {};
-                else if (line.startsWith('END:VEVENT')) { if (currentEvent) events.push(currentEvent); currentEvent = null; }
-                else if (currentEvent) {
-                    const [key, ...v] = line.split(':'); const value = v.join(':');
-                    if (key && value) {
-                        if (key.includes('DTSTART')) currentEvent.start = value;
-                        if (key.includes('SUMMARY')) currentEvent.summary = value;
-                        if (key.includes('DESCRIPTION')) currentEvent.description = value;
-                    }
-                }
-            }
-            return events;
-        }
-
-        function getNextEvent(events) {
-            const now = new Date();
-            const future = events.map(e => {
-                if (!e.start) return null;
-                const d = e.start; let date;
-                if (d.length === 8) { date = new Date(`${d.substring(0, 4)}-${d.substring(4, 6)}-${d.substring(6, 8)}`); }
-                else { const y = d.substring(0, 4), m = d.substring(4, 6), day = d.substring(6, 8), h = d.substring(9, 11), min = d.substring(11, 13), s = d.substring(13, 15); date = d.endsWith('Z') ? new Date(Date.UTC(y, m - 1, day, h, min, s)) : new Date(y, m - 1, day, h, min, s); }
-                return { ...e, date };
-            }).filter(e => e && e.date > now).sort((a, b) => a.date - b.date);
-            return future[0];
-        }
-
-        let countdownInterval;
-        function startCountdown(event, container, card) {
-            if (countdownInterval) clearInterval(countdownInterval);
-            const desc = event.description || "";
-            const urlMatch = desc.match(/Get up-to-date information at:\\?[n\s]*(https?:\/\/[^\s\\]+)/) || desc.match(/(https?:\/\/[^\s]+)/);
-            const targetUrl = urlMatch ? urlMatch[1] : null;
-            if (targetUrl) { card.onclick = () => window.open(targetUrl, '_blank'); container.innerHTML += `<div class="countdown-link-hint">Click to view event details</div>`; }
-            const update = () => {
-                const now = new Date().getTime();
-                const distance = event.date.getTime() - now;
-                if (distance < 0) { clearInterval(countdownInterval); container.innerHTML = "Event Started!"; return; }
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                container.innerHTML = `<div class="countdown-timer">${days}d ${hours}h ${minutes}m ${seconds}s</div><div class="countdown-label">${event.summary}</div>`;
+            const r = await fetch(`${CONFIG.authWorker}/pat`);
+            const j = await r.json();
+            return {
+                'Authorization': `token ${j.token}`,
+                'Accept': 'application/vnd.github+json'
             };
-            update(); countdownInterval = setInterval(update, 1000);
         }
 
-        // --- INIT ---
-        window.addEventListener('DOMContentLoaded', () => {
-            fetchICalData();
-            loadMergedActivity();
-        });
+        // ---------- CONTRIBUTORS (REAL STANDINGS) ----------
+        async function loadContributors() {
+            const el = document.getElementById('contributors');
+            const headers = await getHeaders();
+
+            let page = 1, commits = [];
+            while (page <= 10) {
+                const r = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/commits?per_page=100&page=${page}`, { headers });
+                if (!r.ok) break;
+                const d = await r.json();
+                if (!d.length) break;
+                commits.push(...d);
+                page++;
+            }
+
+            const map = {};
+            for (const c of commits) {
+                const key = c.author?.login ?? c.commit.author.email;
+                const name = c.author?.login ?? c.commit.author.name;
+                const avatar = c.author?.avatar_url ?? `https://github.com/${CONFIG.owner}.png`;
+                if (!map[key]) map[key] = { name, avatar, commits: 0 };
+                map[key].commits++;
+            }
+
+            const sorted = Object.values(map).sort((a, b) => b.commits - a.commits).slice(0, 10);
+
+            el.innerHTML = sorted.map((u, i) => `
+<div class="activity-item">
+<img src="${u.avatar}" class="activity-avatar">
+<div>
+<div class="activity-author">#${i + 1} ${u.name}</div>
+<div class="activity-msg">${u.commits} commits</div>
+</div>
+</div>`).join('');
+        }
+
+        // ---------- ACTIVITY FEED ----------
+        async function loadActivity() {
+            const el = document.getElementById('activity-feed');
+            const headers = await getHeaders();
+
+            const [commits, issues, pulls] = await Promise.all([
+                fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/commits?per_page=5`, { headers }).then(r => r.json()),
+                fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues?state=open&per_page=5`, { headers }).then(r => r.json()),
+                fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/pulls?state=open&per_page=5`, { headers }).then(r => r.json())
+            ]);
+
+            let merged = [
+                ...commits.map(c => ({ date: new Date(c.commit.author.date), author: c.commit.author.name, avatar: c.author?.avatar_url, msg: c.commit.message, url: c.html_url })),
+                ...issues.filter(i => !i.pull_request).map(i => ({ date: new Date(i.created_at), author: i.user.login, avatar: i.user.avatar_url, msg: `Issue #${i.number}: ${i.title}`, url: i.html_url })),
+                ...pulls.map(p => ({ date: new Date(p.created_at), author: p.user.login, avatar: p.user.avatar_url, msg: `PR #${p.number}: ${p.title}`, url: p.html_url }))
+            ].sort((a, b) => b.date - a.date).slice(0, 10);
+
+            el.innerHTML = merged.map(i => `
+<div class="activity-item" onclick="window.open('${i.url}')">
+<img src="${i.avatar}" class="activity-avatar">
+<div>
+<div class="activity-author">${i.author}</div>
+<div class="activity-msg">${i.msg}</div>
+<div class="activity-date">${i.date.toLocaleString()}</div>
+</div>
+</div>`).join('');
+        }
+
+        // ---------- CALENDAR ----------
+        async function loadCalendar() {
+            const ui = document.getElementById('countdown-ui');
+            const txt = await fetch(`${CONFIG.authWorker}/calendar`).then(r => r.text());
+            const match = txt.match(/DTSTART:(\d+T\d+Z)/);
+            if (!match) { ui.innerText = "No events"; return; }
+            const dateStr = match[1];
+            const d = new Date(dateStr.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/, "$1-$2-$3T$4:$5:$6Z"));
+
+            setInterval(() => {
+                const now = new Date();
+                const diff = d - now;
+                if (diff < 0) { ui.innerText = "Event started!"; return; }
+                const dd = Math.floor(diff / 86400000);
+                const hh = Math.floor((diff % 86400000) / 3600000);
+                const mm = Math.floor((diff % 3600000) / 60000);
+                const ss = Math.floor((diff % 60000) / 1000);
+                ui.innerHTML = `<div class="countdown-timer">${dd}d ${hh}h ${mm}m ${ss}s</div>`;
+            }, 1000);
+        }
+
+        window.onload = () => {
+            loadCalendar();
+            loadActivity();
+            loadContributors();
+        };
     </script>
+
 </body>
 
 </html>

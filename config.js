@@ -15,62 +15,76 @@
         along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-// Polyfill crypto.randomUUID for non-secure contexts (e.g., HTTP on [::] or IP)
+/*
+async function fetchToken() {
+    try {
+        // Fetch from your worker
+        const res = await fetch("https://kiwiback.veerbajaj11.workers.dev/pat");
+        if (!res.ok) return "";
+        const data = await res.json();
+        return data.token; // Returns JUST the string
+    } catch (err) {
+        console.error("Token fetch failed:", err);
+        return "";
+    }
+}
+*/
+
+// Polyfill for randomUUID
 if (typeof crypto !== 'undefined' && !crypto.randomUUID) {
-    crypto.randomUUID = function () {
-        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+    crypto.randomUUID = () =>
+        ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         );
-    };
 }
 
 const CONFIG = {
-    // Your GitHub Organization or Username
     owner: "team5171",
-
-    // The Repository Name (Source for Docs)
     repo: "2026docs",
-
-    // The Repository for the Activity Feed (can be the same or different)
-    activityRepo: "FRC-2026",
-
-    // Default Branch (main/master)
+    activityRepo: "2026docs",
     branch: "main",
 
-    // Personal Access Token for GitHub API (optional)
+    // We will populate this via the init logic in index.html 
+    // or keep it as an empty string here.
     repoToken: "",
 
-    // File extensions to index for the AI assistant
-    extensions: [".md", ".TBD", ".kiwi", ".txt", ".sh", ".java"],
-
-    // Paths/filenames to ignore (regex strings)
-    // Example: ["^_.*\\.md$"] ignores files starting with _ and ending in .md
+    extensions: [".md", ".txt", ".java"],
     ignorePaths: ["^_.*\\.md$"],
 
-    // ── Ask the Kiwi (AI Chat) ──────────────────────────────────────
-    // Set this to your deployed Cloudflare Worker URL to enable the chat widget.
-    // Leave empty or remove to disable the widget.
     askKiwiEndpoint: "https://kiwiback.veerbajaj11.workers.dev",
+    authWorker: "https://kiwiback.veerbajaj11.workers.dev", // Added this reference
+    ai_owner: "team5171",
+    ai_repo: "FRC-2026",
+    ai_branch: "main",
 
-    // Branding
     branding: {
-        title: "Team 5171", // Window title
-        shortTitle: "5171",         // Sidebar title
+        title: "Team 5171",
+        shortTitle: "5171",
         logo: "https://github.com/team5171.png",
         welcomeTitle: "Welcome to Team 5171",
         welcomeText: "We are initializing the workspace and fetching the latest guides. Please select a file from the sidebar to begin."
     },
 
-    // Footer Info
     footer: {
         creator: "Veer Bajaj",
-        organization: "Team 5171", // If none use Kiwi Docs
+        organization: "Team 5171",
         version: "Kiwi Docs v2.2.0"
     },
-
 };
 
-// Auto-detect base URL if not manually set
+// Global initialization helper
+async function initializeKiwiConfig() {
+    const token = await fetchToken();
+    CONFIG.repoToken = token;
+    // Also update the legacy Settings object used in your index.html
+    if (window.Settings) {
+        window.Settings.token = token;
+    }
+}
+
+// Kick off the fetch immediately
+initializeKiwiConfig();
+
 if (!CONFIG.baseUrl) {
     CONFIG.baseUrl = window.location.href.split('?')[0].replace(/\/$/, "");
 }

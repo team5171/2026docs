@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commit Rankings | Team 5171</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #090b0f;
+            --glass-bg: rgba(22, 27, 34, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-primary: #58a6ff;
+            --accent-secondary: #bc8cff;
+            --text-main: #e6edf3;
+            --text-dim: #8b949e;
+            --glow: 0 0 20px rgba(88, 166, 255, .15);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: Inter, system-ui;
+            margin: 0;
+            color: var(--text-main);
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .rankings-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .dash-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--glow);
+        }
+
+        h2 {
+            font-family: Outfit;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            letter-spacing: .05em;
+            margin: 0 0 24px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--glass-border);
+            align-items: center;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--glass-border);
+        }
+
+        .activity-author {
+            font-weight: 600;
+            font-family: Outfit;
+            color: var(--accent-secondary);
+            font-size: 1.1rem;
+        }
+
+        .activity-msg {
+            font-size: .9rem;
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: url('https://github.com/team5171.png') center/cover;
+            margin: 0 auto 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="rankings-container">
+        <div style="text-align:center;margin-bottom:20px">
+            <div class="logo"></div>
+            <h1 style="font-family:Outfit;margin:0;font-size:1.5rem">Leaderboard</h1>
+        </div>
+
+        <div class="dash-card">
+            <h2>Commit Rankings</h2>
+            <div id="contributors">Analyzing repository data...</div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            owner: "team5171",
+            repo: "FRC-2026",
+            authWorker: "https://team5171pat.veerbajaj11.workers.dev"
+        };
+
+        async function getHeaders() {
+            try {
+                const r = await fetch(`${CONFIG.authWorker}/pat`);
+                const j = await r.json();
+                return {
+                    'Authorization': `token ${j.token}`,
+                    'Accept': 'application/vnd.github+json'
+                };
+            } catch (e) {
+                console.error("Auth failed", e);
+                return {};
+            }
+        }
+
+        async function loadContributors() {
+            const el = document.getElementById('contributors');
+            const headers = await getHeaders();
+
+            try {
+                let page = 1, commits = [];
+                // Fetching up to 500 commits to get accurate rankings
+                while (page <= 5) {
+                    const r = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/commits?per_page=100&page=${page}`, { headers });
+                    if (!r.ok) break;
+                    const d = await r.json();
+                    if (!d.length) break;
+                    commits.push(...d);
+                    page++;
+                }
+
+                const map = {};
+                for (const c of commits) {
+                    const key = c.author?.login ?? c.commit.author.email;
+                    const name = c.author?.login ?? c.commit.author.name;
+                    const avatar = c.author?.avatar_url ?? `https://github.com/${CONFIG.owner}.png`;
+                    if (!map[key]) map[key] = { name, avatar, count: 0 };
+                    map[key].count++;
+                }
+
+                const sorted = Object.values(map).sort((a, b) => b.count - a.count).slice(0, 10);
+
+                el.innerHTML = sorted.map((u, i) => `
+        <div class="activity-item">
+            <img src="${u.avatar}" class="activity-avatar">
+            <div>
+                <div class="activity-author">#${i + 1} ${u.name}</div>
+                <div class="activity-msg">${u.count} Total Commits</div>
+            </div>
+        </div>`).join('');
+            } catch (err) {
+                el.innerText = "Error loading rankings.";
+            }
+        }
+
+        window.onload = loadContributors;
+    </script>
+
+</body>
+
+</html>

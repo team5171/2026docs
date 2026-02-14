@@ -43,7 +43,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
-            margin: 24px;
+            margin-top: 24px;
         }
 
         .dash-card {
@@ -113,7 +113,7 @@
             opacity: 0.7;
         }
 
-        /* Activity Feed & Rankings */
+        /* Activity Feed */
         .activity-item {
             padding: 12px 0;
             border-bottom: 1px solid var(--glass-border);
@@ -141,16 +141,6 @@
             height: 24px;
             border-radius: 50%;
             border: 1px solid var(--glass-border);
-        }
-
-        /* Stylized for Leaderboard */
-        .rankings-list .activity-avatar {
-            width: 32px;
-            height: 32px;
-        }
-
-        .rankings-list .activity-author {
-            font-size: 1rem;
         }
 
         .activity-msg {
@@ -190,7 +180,7 @@
 </head>
 
 <body>
-    <div style="text-align:center;margin:40px 0;">
+    <div style="text-align:center;margin-bottom:40px;">
         <div class="logo-circle" style="width:80px;height:80px;margin:0 auto 16px;"></div>
         <h1 style="font-size:2.5rem;margin:0;">2026 Season Overview</h1>
         <p style="color:var(--text-dim);">Technical Hub for Team 5171</p>
@@ -201,22 +191,15 @@
             <h2>Next Event</h2>
             <div id="countdown-ui" style="text-align:center;padding:20px;">Loading Calendar...</div>
         </div>
-
         <div class="dash-card">
             <h2>Team Updates</h2>
             <div id="activity-feed"></div>
-        </div>
-
-        <div class="dash-card">
-            <h2>Commit Rankings</h2>
-            <div id="contributors" class="rankings-list">Analyzing repository data...</div>
         </div>
     </div>
 
     <script>
         const CONFIG = {
             owner: "team5171",
-            repo: "FRC-2026", // Primary repo
             activityRepo: "FRC-2026",
             logo: "https://github.com/team5171.png",
             authWorker: "https://team5171pat.veerbajaj11.workers.dev"
@@ -241,16 +224,23 @@
             }
         }
 
-        // --- MERGED ACTIVITY (from index.html) ---
+        // --- MERGED ACTIVITY ---
         async function loadMergedActivity() {
             const feed = document.getElementById('activity-feed');
             feed.innerHTML = `<div style="font-size:0.8rem;padding:12px 0;color:var(--text-dim)">Synchronizing data...</div>`;
             try {
                 const headers = await getHeaders();
+                if (!headers.Authorization) {
+                    console.warn("No Auth token available. Private repos will 404.");
+                }
+
                 const fetchRepoResource = async (resource) => {
                     const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.activityRepo}/${resource}`;
                     const res = await fetch(url, { headers });
-                    if (!res.ok) return [];
+                    if (!res.ok) {
+                        console.error(`Failed to fetch ${resource}: ${res.status} ${res.statusText}`);
+                        return [];
+                    }
                     return res.json();
                 };
 
@@ -267,7 +257,7 @@
                 ].sort((a, b) => b.date - a.date).slice(0, 10);
 
                 if (merged.length === 0) {
-                    feed.innerHTML = `<p style="font-size:0.8rem;color:var(--text-dim)">No recent activity found.</p>`;
+                    feed.innerHTML = `<p style="font-size:0.8rem;color:var(--text-dim)">No recent activity found (or access denied).</p>`;
                     return;
                 }
 
@@ -283,52 +273,11 @@
                 `).join('');
             } catch (err) {
                 console.error("Critical error syncing activity feed:", err);
-                feed.innerHTML = `<p style="font-size:0.8rem;color:#ff7b72">Failed to sync activity feed.</p>`;
+                feed.innerHTML = `<p style="font-size:0.8rem;color:#ff7b72">Failed to sync activity feed. Check console.</p>`;
             }
         }
 
-        // --- COMMIT RANKINGS (from t.html) ---
-        async function loadContributors() {
-            const el = document.getElementById('contributors');
-            try {
-                const headers = await getHeaders();
-                let page = 1, commits = [];
-                // Fetching up to 500 commits to get accurate rankings
-                while (page <= 5) {
-                    const r = await fetch(`https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/commits?per_page=100&page=${page}`, { headers });
-                    if (!r.ok) break;
-                    const d = await r.json();
-                    if (!d.length) break;
-                    commits.push(...d);
-                    page++;
-                }
-
-                const map = {};
-                for (const c of commits) {
-                    const key = c.author?.login ?? c.commit.author.email;
-                    const name = c.author?.login ?? c.commit.author.name;
-                    const avatar = c.author?.avatar_url ?? `https://github.com/${CONFIG.owner}.png`;
-                    if (!map[key]) map[key] = { name, avatar, count: 0 };
-                    map[key].count++;
-                }
-
-                const sorted = Object.values(map).sort((a, b) => b.count - a.count).slice(0, 10);
-
-                el.innerHTML = sorted.map((u, i) => `
-                    <div class="activity-item">
-                        <img src="${u.avatar}" class="activity-avatar">
-                        <div class="activity-content">
-                            <div class="activity-author">#${i + 1} ${u.name}</div>
-                            <div class="activity-msg">${u.count} Total Commits</div>
-                        </div>
-                    </div>`).join('');
-            } catch (err) {
-                console.error("Error loading rankings:", err);
-                el.innerText = "Error loading rankings.";
-            }
-        }
-
-        // --- CALENDAR & COUNTDOWN (from index.html) ---
+        // --- CALENDAR & COUNTDOWN ---
         async function fetchICalData() {
             const container = document.getElementById('countdown-ui');
             const card = document.getElementById('countdown-card');
@@ -345,6 +294,7 @@
             }
         }
 
+        // --- ICS PARSING & COUNTDOWN ---
         function parseICS(icsData) {
             const events = []; const lines = icsData.split(/\r\n|\n|\r/); let currentEvent = null;
             for (const line of lines) {
@@ -398,7 +348,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             fetchICalData();
             loadMergedActivity();
-            loadContributors();
         });
     </script>
 </body>

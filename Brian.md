@@ -1,3 +1,4 @@
+# For Brian (ps thats NOT the real name of our robot)
 # **Module Configuration**
 
 | Module        | Angle Motor ID | Drive Motor ID |

@@ -1,9 +1,9 @@
 __Kiwi Docs Version:__ 2026.1.30.1
 
-This documentation + markdown files are licensed under FRC Team 5171 (York School Robotics).
+This documentation + markdown files are licensed under FRC Team 5171 (York School Robotics). They are not for redistribution, modification, or commercial use without explicit written permission from the team.
 
-The website content + hosting software is licensed under Kiwi Docs.
-
+The website content + hosting software is licensed under Kiwi Docs:
+---
 Copyright (C) 2026 - Kiwi Docs by Veer Bajaj <https://github.com/kiwidocs>
 
 Kiwi Docs is free software: you can redistribute it and/or modify
@@ -17,3 +17,5 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 See <https://www.gnu.org/licenses/>.
+--- 
+For any inquiries, please visit [team5171.com](https://team5171.com)

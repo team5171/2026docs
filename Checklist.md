@@ -1,3 +1,21 @@
+# NOTE: February 20, 21, 23, 25, 27, 28 of 2026:
+
+Mentor Kevin will be absent. "Try to get photon vision working."
+# February 18, 2026
+
+We have finished coding the **Swerve Drive** on Brian.
+
+We also have a Shooter subsystem on FlatBot (for more info on commands and subsystems, click [here](https://docs.wpilib.org/en/stable/docs/software/commandbased/what-is-command-based.html#subsystems-and-commands)) that allows us to shoot with two motors (a flywheel and a feeder) to load and shoot balls. We can pass a designated **RPM** (thanks to Asher) and use that to launch fuel at a certain distance.
+
+NOTE: the shooter on FlatBot is NOT in the "main" branch. It is in the "feat/flatbot-shooter-only" branch.
+-Veer
+
+Any changes?
+**PLEASE** edit this file with the Edit in GitHub button, and add your name!
+
+
+
+
 # February 6, 2026
 (transcript)
 OK, here's a summary that we did. We worked on the simulator and got it working. We also worked on. Let's see work on getting a simulator working. I basically we basically sat and learned like a ton of concepts and then he also gave us a list of stuff to work on tomorrow we actually might be able to physically test it tomorrow depending on how things work out. I'm gonna be coming in the afternoon. But we will have to see what it's like they've made some pretty significant progress on the actual, but it looks really good. Pretty sleep too. See ya. See you tomorrow.

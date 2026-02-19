@@ -267,16 +267,31 @@
                     return;
                 }
 
+                // Prioritize README/Dashboard at the top
+                files.sort((a, b) => {
+                    const aName = a.name.toLowerCase();
+                    const bName = b.name.toLowerCase();
+                    if (aName === 'readme.md') return -1;
+                    if (bName === 'readme.md') return 1;
+                    return aName.localeCompare(bName);
+                });
+
+
                 container.innerHTML = files.map(file => {
                     const urlName = file.path.replace('.md', '');
-                    const href = urlName.toLowerCase() === 'readme' ? './' : `?page=${urlName}`;
+                    const isDashboard = urlName.toLowerCase() === 'readme';
+                    const href = isDashboard ? './' : `?page=${urlName}`;
+                    const label = isDashboard ? 'Dashboard' : file.name.replace('.md', '');
+                    const iconBase = isDashboard ? 'svg/dashboard' : 'svg/doc';
+
                     return `
                         <a class="nav-link" href="${href}" data-path="${file.path}" onclick="event.preventDefault(); loadFile('${file.path}', this)">
-                            <img src="svg/doc.svg" data-base="svg/doc" width="16" height="16" style="opacity: 0.8;">
-                            ${file.name.replace('.md', '')}
+                            <img src="${iconBase}.svg" data-base="${iconBase}" width="16" height="16" style="opacity: 0.8;">
+                            ${label}
                         </a>
                     `;
                 }).join('');
+
 
                 // Load default if exists
                 const params = new URLSearchParams(window.location.search);

@@ -8,6 +8,28 @@ We have finished coding the **Swerve Drive** on Brian.
 We also have a Shooter subsystem on FlatBot (for more info on commands and subsystems, click [here](https://docs.wpilib.org/en/stable/docs/software/commandbased/what-is-command-based.html#subsystems-and-commands)) that allows us to shoot with two motors (a flywheel and a feeder) to load and shoot balls. We can pass a designated **RPM** (thanks to Asher) and use that to launch fuel at a certain distance.
 
 NOTE: the shooter on FlatBot is NOT in the "main" branch. It is in the "feat/flatbot-shooter-only" branch.
+
+## Attachments:
+### Shooter (FlatBot)
+<br>
+<video controls width="250" height="150">
+    <source src="attachments/prog/2-18-26/shooter.MOV" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="attachments/prog/2-18-26/shooter.MOV">this link</a> to watch the video.
+</video>
+
+### Drive (Brian)
+<br>
+<video controls width="250" height="150">
+    <source src="attachments/prog/2-18-26/swerve.MOV" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="attachments/prog/2-18-26/swerve.MOV">this link</a> to watch the video.
+</video>
+
+### New 3D Printers
+<br>
+<video controls width="250" height="150">
+    <source src="attachments/prog/2-18-26/3D.MOV" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="attachments/prog/2-18-26/3D.MOV">this link</a> to watch the video.
+</video>
 -Veer
 
 Any changes?

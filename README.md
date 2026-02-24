@@ -1,1 +1,1 @@
-<iframe src="2026docs/land/" width="100%" style="height: 80vh;" frameborder="0"></iframe>
+<iframe src="land/index.html" width="100%" style="height: 80vh;" frameborder="0"></iframe>

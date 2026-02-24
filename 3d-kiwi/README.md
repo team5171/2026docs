@@ -1,4 +1,4 @@
-# 3d-kiwi
+# 3d
 
 This section is under construction.
 

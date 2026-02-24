@@ -1,4 +1,4 @@
-# cad-kiwi
+# CAD
 
 This section is under construction.
 

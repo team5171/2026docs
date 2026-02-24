@@ -1,4 +1,4 @@
-# electrical-kiwi
+# Electrical
 
 This section is under construction.
 

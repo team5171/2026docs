@@ -1,4 +1,4 @@
-# strategy-kiwi
+# Strategy
 
 This section is under construction.
 

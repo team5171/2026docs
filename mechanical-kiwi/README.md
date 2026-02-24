@@ -1,4 +1,4 @@
-# mechanical-kiwi
+# Mechanical
 
 This section is under construction.
 

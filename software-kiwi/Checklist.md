@@ -13,22 +13,22 @@ NOTE: the shooter on FlatBot is NOT in the "main" branch. It is in the "feat/fla
 ### Shooter (FlatBot)
 <br>
 <video controls width="250" height="150">
-    <source src="attachments/prog/2-18-26/shooter.MOV" type="video/mp4">
-    Your browser does not support the video tag. Go to <a href="attachments/prog/2-18-26/shooter.MOV">this link</a> to watch the video.
+    <source src="../attachments/prog/2-18-26/shooter.MOV" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="../attachments/prog/2-18-26/shooter.MOV">this link</a> to watch the video.
 </video>
 
 ### Drive (Brian)
 <br>
 <video controls width="250" height="150">
-    <source src="attachments/prog/2-18-26/swerve.MOV" type="video/mp4">
-    Your browser does not support the video tag. Go to <a href="attachments/prog/2-18-26/swerve.MOV">this link</a> to watch the video.
+    <source src="../attachments/prog/2-18-26/swerve.MOV" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="../attachments/prog/2-18-26/swerve.MOV">this link</a> to watch the video.
 </video>
 
 ### New 3D Printers
 <br>
 <video controls width="250" height="150">
-    <source src="attachments/prog/2-18-26/3D.MOV" type="video/mp4">
-    Your browser does not support the video tag. Go to <a href="attachments/prog/2-18-26/3D.MOV">this link</a> to watch the video.
+    <source src="../attachments/prog/2-18-26/3D.MOV" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="../attachments/prog/2-18-26/3D.MOV">this link</a> to watch the video.
 </video>
 -Veer
 
@@ -45,7 +45,7 @@ OK, here's a summary that we did. We worked on the simulator and got it working.
 ### Recording
 
 <audio controls>
-  <source src="attachments/prog/2-6-26.mp3" type="audio/mp3">
+  <source src="../attachments/prog/2-6-26.mp3" type="audio/mp3">
   Your browser does not support the audio element.
 </audio>
 

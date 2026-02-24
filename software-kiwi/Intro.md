@@ -9,8 +9,8 @@ This documentation is designed to be your ally. It’s more than just a setup gu
 **Season Video:**
 <br>
 <video controls width="250" height="150">
-    <source src="attachments/game/animation.mp4" type="video/mp4">
-    Your browser does not support the video tag. Go to <a href="attachments/game/animation.mp4">this link</a> to watch the video.
+    <source src="../attachments/game/animation.mp4" type="video/mp4">
+    Your browser does not support the video tag. Go to <a href="../attachments/game/animation.mp4">this link</a> to watch the video.
 </video>
 
 ---

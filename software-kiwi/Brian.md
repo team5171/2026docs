@@ -15,5 +15,5 @@
  
 # Robot Picture
 
-![Robot](attachments/robot.png)
+![Robot](../attachments/robot.png)
 From top view, the front of the robot is the side with the battery

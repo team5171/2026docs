@@ -75,6 +75,9 @@
         <div class="nav-link" onclick="openSettings()">
             <img src="svg/settings.svg" data-base="svg/settings" width="16" height="16" style="opacity: 0.8;"> Settings
         </div>
+        <div class="nav-link" onclick="toggleLightMode()">
+            <span style="display:inline-block; width:16px; text-align:center; opacity:0.8;">🌗</span> <span id="light-mode-text">Light Mode</span>
+        </div>
         <div class="nav-footer" id="sidebar-footer">
 
         </div>
@@ -142,6 +145,25 @@
             currentPath: 'README.md' // Fallback
         };
 
+        if (localStorage.getItem('kiwi_light_mode') === 'true') {
+            document.documentElement.classList.add('light-mode');
+        }
+
+        function toggleLightMode() {
+            const isLight = document.documentElement.classList.toggle('light-mode');
+            localStorage.setItem('kiwi_light_mode', isLight);
+            updateLightModeUI();
+        }
+
+        function updateLightModeUI() {
+            const isLight = document.documentElement.classList.contains('light-mode');
+            const el = document.getElementById('light-mode-text');
+            if(el) el.textContent = isLight ? "Dark Mode" : "Light Mode";
+        }
+        
+        // Ensure UI matches state on load
+        window.addEventListener('DOMContentLoaded', updateLightModeUI);
+
         const Settings = {
             token: localStorage.getItem('kiwi_token') || '',
             localMode: localStorage.getItem('kiwi_local_mode') === 'true',
@@ -157,6 +179,7 @@
 
         const ENDPOINTS = {
             contents: `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents?ref=${CONFIG.branch}`,
+            tree: `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/git/trees/${CONFIG.branch}?recursive=1`,
             commits: `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/commits?sha=${CONFIG.branch}&per_page=5`,
             raw: (path) => Settings.localMode ? `../${path}` : `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${CONFIG.branch}/${path}`
         };
@@ -251,13 +274,15 @@
                     headers['Authorization'] = `token ${Settings.token}`;
                 }
 
-                const res = await fetch(ENDPOINTS.contents, { headers });
+                const res = await fetch(ENDPOINTS.tree, { headers });
                 if (!res.ok) throw new Error("Repo not found");
-                const items = await res.json();
+                const data = await res.json();
+                
+                const items = data.tree.filter(i => i.type === 'blob');
                 const files = items.filter(i => {
-                    if (!i.name.endsWith('.md')) return false;
+                    if (!i.path.endsWith('.md')) return false;
                     if (CONFIG.ignorePaths && Array.isArray(CONFIG.ignorePaths)) {
-                        return !CONFIG.ignorePaths.some(pattern => new RegExp(pattern).test(i.name));
+                        return !CONFIG.ignorePaths.some(pattern => new RegExp(pattern).test(i.path));
                     }
                     return true;
                 });
@@ -268,39 +293,63 @@
                 }
 
                 // Prioritize README/Dashboard at the top
-                files.sort((a, b) => {
-                    const aName = a.name.toLowerCase();
-                    const bName = b.name.toLowerCase();
-                    if (aName === 'readme.md') return -1;
-                    if (bName === 'readme.md') return 1;
-                    return aName.localeCompare(bName);
+                const readmeFile = files.find(f => f.path.toLowerCase() === 'readme.md');
+                const otherFiles = files.filter(f => f.path.toLowerCase() !== 'readme.md');
+                
+                // Group by root folder
+                const folders = {};
+                otherFiles.forEach(f => {
+                    const parts = f.path.split('/');
+                    const isRoot = parts.length === 1;
+                    const folderId = isRoot ? 'root' : parts[0];
+                    if (!folders[folderId]) folders[folderId] = [];
+                    // Extract filename for display
+                    f.displayName = parts[parts.length - 1].replace('.md', '');
+                    folders[folderId].push(f);
                 });
 
-
-                container.innerHTML = files.map(file => {
-                    const urlName = file.path.replace('.md', '');
-                    const isDashboard = urlName.toLowerCase() === 'readme';
-                    const href = isDashboard ? './' : `?page=${urlName}`;
-                    const label = isDashboard ? 'Dashboard' : file.name.replace('.md', '');
-                    const iconBase = isDashboard ? 'svg/dashboard' : 'svg/doc';
-
-                    return `
-                        <a class="nav-link" href="${href}" data-path="${file.path}" onclick="event.preventDefault(); loadFile('${file.path}', this)">
-                            <img src="${iconBase}.svg" data-base="${iconBase}" width="16" height="16" style="opacity: 0.8;">
-                            ${label}
+                let html = '';
+                if (readmeFile) {
+                    html += `
+                        <a class="nav-link" href="./" data-path="${readmeFile.path}" onclick="event.preventDefault(); loadFile('${readmeFile.path}', this)">
+                            <img src="svg/dashboard.svg" data-base="svg/dashboard" width="16" height="16" style="opacity: 0.8;">
+                            Dashboard
                         </a>
                     `;
-                }).join('');
+                }
 
+                // Render groups
+                for (const [folderId, folderFiles] of Object.entries(folders)) {
+                    folderFiles.sort((a, b) => a.displayName.localeCompare(b.displayName));
+                    
+                    if (folderId !== 'root') {
+                        const mapping = (CONFIG.folderMapping || []).find(m => m.folder_id === folderId);
+                        const folderDesc = mapping ? mapping.description : folderId;
+                        html += `<div class="nav-group-title" style="margin-top: 12px; font-size: 0.8rem;">${folderDesc}</div>`;
+                    }
+                    
+                    html += folderFiles.map(file => {
+                        const urlName = file.path.replace('.md', '');
+                        const href = `?page=${urlName}`;
+                        
+                        return `
+                            <a class="nav-link" href="${href}" data-path="${file.path}" onclick="event.preventDefault(); loadFile('${file.path}', this)">
+                                <img src="svg/doc.svg" data-base="svg/doc" width="16" height="16" style="opacity: 0.8;">
+                                ${file.displayName}
+                            </a>
+                        `;
+                    }).join('');
+                }
+
+                container.innerHTML = html;
 
                 // Load default if exists
                 const params = new URLSearchParams(window.location.search);
                 const requested = params.get('page') || params.get('') || window.location.search.substring(1);
 
                 // Prioritize finding the file
-                const target = files.find(f => f.name.toLowerCase() === (requested + ".md").toLowerCase())
-                    || files.find(f => f.path.toLowerCase() === (requested + ".md").toLowerCase())
-                    || files.find(f => f.name === 'README.md')
+                const target = files.find(f => f.path.toLowerCase() === (requested + ".md").toLowerCase())
+                    || files.find(f => f.path.toLowerCase() === 'readme.md')
                     || files[0];
 
                 if (target) {

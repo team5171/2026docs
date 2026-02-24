@@ -49,7 +49,42 @@ const CONFIG = {
     repoToken: "",
 
     extensions: [".md", ".txt", ".java"],
-    ignorePaths: ["^_.*\\.md$"],
+    ignorePaths: [
+        "^_.*\\.md$",
+        "^archive/",
+        "^attachments/",
+        "^dash/",
+        "^\\.gitignore$",
+        "^\\.gitattributes$",
+        "^worker\\.js$"
+    ],
+
+    folderMapping: [
+        {
+            "folder_id": "software-kiwi",
+            "description": "Software Info"
+        },
+        {
+            "folder_id": "3d-kiwi",
+            "description": "3D Printing"
+        },
+        {
+            "folder_id": "cad-kiwi",
+            "description": "CAD"
+        },
+        {
+            "folder_id": "strategy-kiwi",
+            "description": "Strategy"
+        },
+        {
+            "folder_id": "electrical-kiwi",
+            "description": "Electrical"
+        },
+        {
+            "folder_id": "mechanical-kiwi",
+            "description": "Mechanical"
+        }
+    ],
 
     askKiwiEndpoint: "https://kiwiback.veerbajaj11.workers.dev",
     authWorker: "https://kiwiback.veerbajaj11.workers.dev", // Added this reference

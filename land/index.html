@@ -6,14 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team 5171 | Portal</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap"
         rel="stylesheet">
 
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -22,7 +20,7 @@
             --glass-bg: rgba(22, 27, 34, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
 
-            /* Accents */
+            /* Accents - Replaced gradients with solid colors */
             --accent-primary: #58a6ff;
             --accent-secondary: #bc8cff;
 
@@ -30,15 +28,15 @@
             --text-main: #e6edf3;
             --text-dim: #8b949e;
 
-            /* Gradients */
-            --gradient-1: linear-gradient(135deg, #58a6ff 0%, #bc8cff 100%);
+            /* Visuals */
             --glow: 0 0 40px rgba(88, 166, 255, 0.2);
         }
 
         body {
             margin: 0;
             padding: 0;
-            background: transparent;
+            background: #0d1117;
+            /* Set a solid dark background since parent is transparent */
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
@@ -123,23 +121,7 @@
             overflow: hidden;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            transform: skewX(-20deg);
-            transition: 0.5s;
-        }
-
-        .card:hover::before {
-            left: 150%;
-        }
-
-        /* Staggered animation delays for cards */
+        /* Staggered animation delays */
         .card:nth-child(1) {
             animation-delay: 0.1s;
         }
@@ -190,9 +172,11 @@
             transition: all 0.3s ease;
         }
 
+        /* Replaced Gradient Background with Solid Color on Hover */
         .card:hover .icon-wrapper {
-            background: var(--gradient-1);
-            color: #fff;
+            background: var(--accent-primary);
+            color: #0d1117;
+            /* Dark icon on bright background */
             border-color: transparent;
             box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
             transform: scale(1.1) rotate(5deg);
@@ -273,7 +257,6 @@
     </div>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
     </script>
 </body>

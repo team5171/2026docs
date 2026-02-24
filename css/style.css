@@ -27,7 +27,7 @@ body {
     color: var(--text-main);
     height: 100vh;
     display: grid;
-    grid-template-columns: var(--sidebar-width) 1fr var(--aside-width);
+    grid-template-columns: var(--sidebar-width) 1fr;
     overflow: hidden;
 }
 

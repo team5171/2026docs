@@ -97,29 +97,7 @@
         </div>
     </main>
 
-    <aside>
-        <div class="aside-section">
-            <h2><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-                    <path
-                        d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
-                    </path>
-                </svg> Table of Contents</h2>
-            <div id="toc"></div>
-        </div>
-        <div class="aside-section">
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-                <h2 style="margin: 0;"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-                        <path
-                            d="M10.896 2H4.95A1.75 1.75 0 003.2 3.75v9.5c0 .966.784 1.75 1.75 1.75h6.926a1.75 1.75 0 001.75-1.75V3.75A1.75 1.75 0 0011.875 2h-.979zM5 3.5h5.875a.25.25 0 01.25.25v1.5a.25.25 0 01-.25.25H5a.25.25 0 01-.25-.25v-1.5A.25.25 0 015 3.5z">
-                        </path>
-                    </svg> Updates</h2>
-                <div style="display: flex; gap: 8px;">
-                    <!-- Simple Activity Feed (Dynamic) -->
-                </div>
-            </div>
-            <div id="activity-feed"></div>
-        </div>
-    </aside>
+
 
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal" id="add-page-modal">
@@ -507,6 +485,7 @@
 
         async function loadActivity(repoName) {
             const feed = document.getElementById('activity-feed');
+            if (!feed) return;
             feed.innerHTML = `<div style="font-size: 0.8rem; padding: 12px 0; color: var(--text-dim);">Loading...</div>`;
             try {
                 const url = `https://api.github.com/repos/${CONFIG.owner}/${repoName}/commits?per_page=5`;
@@ -531,6 +510,7 @@
 
         function generateTOC(container) {
             const toc = document.getElementById('toc');
+            if (!toc) return;
             const headings = container.querySelectorAll('h1, h2, h3');
             toc.innerHTML = '';
 

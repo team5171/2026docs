@@ -39,6 +39,7 @@ nav {
     display: flex;
     flex-direction: column;
     z-index: 100;
+    overflow-y: auto;
 }
 
 .nav-header {
@@ -97,6 +98,17 @@ nav {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-main);
     transform: translateX(4px);
+}
+
+.folder-chevron {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    transition: transform 0.2s ease;
+    margin-left: auto;
+}
+
+.folder-chevron.open {
+    transform: rotate(180deg);
 }
 
 .nav-link img {

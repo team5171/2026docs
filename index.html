@@ -76,7 +76,8 @@
             <img src="svg/settings.svg" data-base="svg/settings" width="16" height="16" style="opacity: 0.8;"> Settings
         </div>
         <div class="nav-link" onclick="toggleLightMode()">
-            <span style="display:inline-block; width:16px; text-align:center; opacity:0.8;">🌗</span> <span id="light-mode-text">Light Mode</span>
+            <span style="display:inline-block; width:16px; text-align:center; opacity:0.8;">🌗</span> <span
+                id="light-mode-text">Light Mode</span>
         </div>
         <div class="nav-footer" id="sidebar-footer">
 
@@ -158,9 +159,9 @@
         function updateLightModeUI() {
             const isLight = document.documentElement.classList.contains('light-mode');
             const el = document.getElementById('light-mode-text');
-            if(el) el.textContent = isLight ? "Dark Mode" : "Light Mode";
+            if (el) el.textContent = isLight ? "Dark Mode" : "Light Mode";
         }
-        
+
         // Ensure UI matches state on load
         window.addEventListener('DOMContentLoaded', updateLightModeUI);
 
@@ -277,7 +278,7 @@
                 const res = await fetch(ENDPOINTS.tree, { headers });
                 if (!res.ok) throw new Error("Repo not found");
                 const data = await res.json();
-                
+
                 const items = data.tree.filter(i => i.type === 'blob');
                 const files = items.filter(i => {
                     if (!i.path.endsWith('.md')) return false;
@@ -295,17 +296,22 @@
                 // Prioritize README/Dashboard at the top
                 const readmeFile = files.find(f => f.path.toLowerCase() === 'readme.md');
                 const otherFiles = files.filter(f => f.path.toLowerCase() !== 'readme.md');
-                
+
                 // Group by root folder
                 const folders = {};
                 otherFiles.forEach(f => {
                     const parts = f.path.split('/');
                     const isRoot = parts.length === 1;
                     const folderId = isRoot ? 'root' : parts[0];
-                    if (!folders[folderId]) folders[folderId] = [];
-                    // Extract filename for display
-                    f.displayName = parts[parts.length - 1].replace('.md', '');
-                    folders[folderId].push(f);
+                    if (!folders[folderId]) folders[folderId] = { files: [], readme: null };
+
+                    if (parts[parts.length - 1].toLowerCase() === 'readme.md') {
+                        folders[folderId].readme = f;
+                    } else {
+                        // Extract filename for display
+                        f.displayName = parts[parts.length - 1].replace('.md', '');
+                        folders[folderId].files.push(f);
+                    }
                 });
 
                 let html = '';
@@ -318,27 +324,71 @@
                     `;
                 }
 
+                const iconMap = {
+                    'software-kiwi': 'code-2',
+                    '3d-kiwi': 'printer',
+                    'cad-kiwi': 'box',
+                    'strategy-kiwi': 'map',
+                    'electrical-kiwi': 'zap',
+                    'mechanical-kiwi': 'settings'
+                };
+
                 // Render groups
-                for (const [folderId, folderFiles] of Object.entries(folders)) {
-                    folderFiles.sort((a, b) => a.displayName.localeCompare(b.displayName));
-                    
+                for (const [folderId, folderData] of Object.entries(folders)) {
+                    folderData.files.sort((a, b) => a.displayName.localeCompare(b.displayName));
+
                     if (folderId !== 'root') {
                         const mapping = (CONFIG.folderMapping || []).find(m => m.folder_id === folderId);
                         const folderDesc = mapping ? mapping.description : folderId;
-                        html += `<div class="nav-group-title" style="margin-top: 12px; font-size: 0.8rem;">${folderDesc}</div>`;
-                    }
-                    
-                    html += folderFiles.map(file => {
-                        const urlName = file.path.replace('.md', '');
-                        const href = `?page=${urlName}`;
-                        
-                        return `
-                            <a class="nav-link" href="${href}" data-path="${file.path}" onclick="event.preventDefault(); loadFile('${file.path}', this)">
-                                <img src="svg/doc.svg" data-base="svg/doc" width="16" height="16" style="opacity: 0.8;">
-                                ${file.displayName}
+                        const iconName = iconMap[folderId] || 'code-2';
+
+                        const rFile = folderData.readme;
+                        let onClickAttr = `onclick="toggleFolder('${folderId}')"`;
+                        let folderLink = `javascript:void(0)`;
+                        let dataPathAttr = '';
+
+                        if (rFile) {
+                            const urlName = rFile.path.replace('.md', '');
+                            folderLink = `?page=${urlName}`;
+                            onClickAttr = `onclick="event.preventDefault(); loadFile('${rFile.path}', this); toggleFolder('${folderId}')"`;
+                            dataPathAttr = `data-path="${rFile.path}"`;
+                        }
+
+                        html += `
+                            <a class="nav-link folder-link" href="${folderLink}" ${dataPathAttr} ${onClickAttr}>
+                                <img src="svg/dirs/${iconName}.svg" data-base="svg/dirs/${iconName}" width="16" height="16" style="opacity: 0.8;">
+                                <span style="flex-grow: 1; text-align: left;">${folderDesc}</span>
+                                <span class="folder-chevron" id="chevron-${folderId}">▼</span>
                             </a>
+                            <div class="folder-content" id="folder-${folderId}" style="display: none; padding-left: 12px;">
                         `;
-                    }).join('');
+
+                        html += folderData.files.map(file => {
+                            const urlName = file.path.replace('.md', '');
+                            const href = `?page=${urlName}`;
+
+                            return `
+                                <a class="nav-link" href="${href}" data-path="${file.path}" onclick="event.preventDefault(); loadFile('${file.path}', this)">
+                                    <img src="svg/doc.svg" data-base="svg/doc" width="16" height="16" style="opacity: 0.8;">
+                                    ${file.displayName}
+                                </a>
+                            `;
+                        }).join('');
+
+                        html += `</div>`;
+                    } else {
+                        html += folderData.files.map(file => {
+                            const urlName = file.path.replace('.md', '');
+                            const href = `?page=${urlName}`;
+
+                            return `
+                                <a class="nav-link" href="${href}" data-path="${file.path}" onclick="event.preventDefault(); loadFile('${file.path}', this)">
+                                    <img src="svg/doc.svg" data-base="svg/doc" width="16" height="16" style="opacity: 0.8;">
+                                    ${file.displayName}
+                                </a>
+                            `;
+                        }).join('');
+                    }
                 }
 
                 container.innerHTML = html;
@@ -502,6 +552,18 @@
 
         // Mobile Sidebar Toggle
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+        function toggleFolder(folderId) {
+            const content = document.getElementById(`folder-${folderId}`);
+            const chevron = document.getElementById(`chevron-${folderId}`);
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                chevron.classList.add('open');
+            } else {
+                content.style.display = 'none';
+                chevron.classList.remove('open');
+            }
+        }
 
         // Actions
         async function sharePage() {

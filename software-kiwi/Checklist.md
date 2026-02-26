@@ -2,6 +2,13 @@
 
 Mentor Kevin will be absent. "Try to get photon vision working."
 
+# February 27 + 28, 2026
+Veer will be absent. Please ask Alex for help.
+What we got done:
+Blah
+To do:
+Blah
+
 # February 23 and 25, 2026
 We have MERGED the flatbot-shooter-only branch with the brian drivetrain to create the updated main branch.
 

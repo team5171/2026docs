@@ -1,6 +1,38 @@
 # NOTE: February 20, 21, 23, 25, 27, 28 of 2026:
 
 Mentor Kevin will be absent. "Try to get photon vision working."
+
+# February 23 and 25, 2026
+We have MERGED the flatbot-shooter-only branch with the brian drivetrain to create the updated main branch.
+
+### THREE branches:
+
+`main`: The drivetrain of Brian, and the shooter of FlatBot (only to be used when the shooted is electronically attached)
+
+`feat/flatbot-shooter-only`: The shooter of FlatBot (only to be used when the drivetrain is not electronically attached)
+
+`feat/brian-drive-only`: The drivetrain of Brian. 
+
+### Other commits:
+- Fix the NAVX to use usb
+- Change the xbox mapping and add hardware safety measures
+- Add feeder to the AdvantageScope
+
+### Photon Vision
+
+We have imaged the Orange Pi with the latest version of Photon Vision. We need to also connect it to the robot and calibrate it.
+
+### TODOs
+
+- [ ] Connect Orange Pi to robot (waiting on mechanical team)
+- [ ] Calibrate Orange Pi
+- [ ] Test Orange Pi
+- [ ] Split controller inputs (for drivers)
+- [ ] Add intake (waiting on hardware team)
+- [ ] Add climber (waiting on hardware team)
+- [ ] Work on the scheduler dashboard (Asher)
+
+
 # February 18, 2026
 
 We have finished coding the **Swerve Drive** on Brian.

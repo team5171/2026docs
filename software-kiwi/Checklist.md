@@ -1,3 +1,36 @@
+# March 6, 2026
+
+Hello everyone, today we did three main things:
+
+1) Calibrate the kV for the flywheel (meaning fixing the gap in between what we tell it to do and what it does)
+
+2) We finished fitting the flywheel angular velocity vs. distance model by finding the needed RPM to shoot fuel dead-center in the hub at various distances. (at a 0-degree mounted shooter)
+
+3) Implement a new tool that allows us to connect to Brian and build and deploy to it.
+
+It is called **B**uild **A**nd **D**eploy **Ass**istant (you get it...)
+
+TIP: Use on driver station with `bad` in the integrated terminal.
+
+
+
+# March 5, 2026 (Mentor Kevin)
+
+Software folks, I made a few changes to the codebase, building on the changes we made on Wednesday. The main branch currently has working code to test the feeder+flywheels. 
+
+
+Button mapping (in TestRobotContainer.java) is:
+Hold RB = run flywheels according to a target distance (currently just coming from a variable testDistance)
+Press LB = stop flywheels
+Hold X = decrease testDistance
+Hold B = increase testDistance
+Hold A = run feeder
+
+Eventually, we'll change the testDistance to use a real robot<->hub distance that we'll derive in real-time from our odometry. I defined a linear model in one of the commands, 
+angular velocity = m*distance + b
+
+I'll be out today and tomorrow, so I recommend reviewing the changes we've made to get a good sense of the subsystems and commands. From there, you can try fitting the flywheel angular velocity vs. distance model by finding the needed RPM to shoot fuel dead-center in the hub at various distances. I'll be online so feel free to message me if you have any questions.
+
 # NOTE: February 20, 21, 23, 25, 27, 28 of 2026:
 
 Mentor Kevin will be absent. "Try to get photon vision working."
@@ -5,9 +38,7 @@ Mentor Kevin will be absent. "Try to get photon vision working."
 # February 27 + 28, 2026
 Veer will be absent. Please ask Alex for help.
 What we got done:
-Blah
-To do:
-Blah
+Alex never filled it out...
 
 # February 23 and 25, 2026
 We have MERGED the flatbot-shooter-only branch with the brian drivetrain to create the updated main branch.

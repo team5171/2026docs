@@ -436,6 +436,25 @@
                         }
                     }
                 }
+                
+                // Add Actions section at the bottom of the floating menu
+                subHtml += `<div style="padding: 12px 14px 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 8px; border-top: 1px solid var(--glass-border);">Actions</div>`;
+                
+                subHtml += `
+                    <div onclick="sharePage(); document.getElementById('subteams-sidebar').style.display='none';" style="display: flex; align-items: center; gap: 12px; color: var(--text-main); text-decoration: none; padding: 10px 14px; border-radius: 12px; transition: background 0.2s; font-size: 0.95rem; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <img src="svg/share.svg" data-base="svg/share" width="16" height="16" style="opacity: 0.8;"> Share Page
+                    </div>
+                    <div onclick="editPage(); document.getElementById('subteams-sidebar').style.display='none';" style="display: flex; align-items: center; gap: 12px; color: var(--text-main); text-decoration: none; padding: 10px 14px; border-radius: 12px; transition: background 0.2s; font-size: 0.95rem; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <img src="svg/edit.svg" data-base="svg/edit" width="16" height="16" style="opacity: 0.8;"> Edit in GitHub
+                    </div>
+                    <div onclick="addPageModal(); document.getElementById('subteams-sidebar').style.display='none';" style="display: flex; align-items: center; gap: 12px; color: var(--text-main); text-decoration: none; padding: 10px 14px; border-radius: 12px; transition: background 0.2s; font-size: 0.95rem; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <img src="svg/add.svg" data-base="svg/add" width="16" height="16" style="opacity: 0.8;"> Add New Page
+                    </div>
+                    <div onclick="openSettings(); document.getElementById('subteams-sidebar').style.display='none';" style="display: flex; align-items: center; gap: 12px; color: var(--text-main); text-decoration: none; padding: 10px 14px; border-radius: 12px; transition: background 0.2s; font-size: 0.95rem; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <img src="svg/settings.svg" data-base="svg/settings" width="16" height="16" style="opacity: 0.8;"> Settings
+                    </div>
+                `;
+
                 subteamsList.innerHTML = subHtml;
 
                 // Load default if exists

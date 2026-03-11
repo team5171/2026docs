@@ -26,20 +26,13 @@ body {
     background-image: var(--gradient-bg-1), var(--gradient-bg-2);
     color: var(--text-main);
     height: 100vh;
-    display: grid;
-    grid-template-columns: var(--sidebar-width) 1fr;
-    overflow: hidden;
+    display: block;
+    overflow-y: auto;
 }
 
 /* Sidebar Styling */
 nav {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    border-right: 1px solid var(--glass-border);
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
-    overflow-y: auto;
+    display: none !important;
 }
 
 .nav-header {
@@ -141,12 +134,11 @@ nav {
 /* Main Content area */
 main {
     padding: 40px;
-    overflow-y: auto;
-    scroll-behavior: smooth;
+    min-height: 100vh;
 }
 
 #content {
-    max-width: 800px;
+    width: 100%;
     margin: 0 auto;
     background: rgba(255, 255, 255, 0.02);
     padding: 48px;

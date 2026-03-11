@@ -62,7 +62,7 @@ const CONFIG = {
     folderMapping: [
         {
             "folder_id": "software-kiwi",
-            "description": "Software Info"
+            "description": "Software"
         },
         {
             "folder_id": "3d-kiwi",
@@ -83,6 +83,10 @@ const CONFIG = {
         {
             "folder_id": "mechanical-kiwi",
             "description": "Mechanical"
+        },
+        {
+            "folder_id": "gfc-kiwi",
+            "description": "Game Field Construction"
         }
     ],
 

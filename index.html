@@ -84,13 +84,31 @@
         </div>
     </nav>
 
-    <main>
-        <div id="content">
-            <div style="text-align: center; padding-top: 100px;">
-                <div class="logo-circle" id="welcome-logo" style="width: 60px; height: 60px; margin: 0 auto 24px;">
-                </div>
-                <h1 style="font-family: 'Outfit';" id="welcome-title"></h1>
-                <p style="color: var(--text-dim); font-size: 1.1rem; max-width: 500px; margin: 0 auto;"
+    <main style="position: relative;">
+        <!-- Floating Subteams Menu -->
+        <div id="subteams-sidebar"
+            style="display: none; position: absolute; top: 80px; left: 24px; z-index: 999; width: 260px; background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <h3
+                style="margin-top: 0; font-family: 'Outfit'; color: var(--text-main); border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin-bottom: 12px; font-size: 1.1rem;">
+                Team 5171</h3>
+            <div id="subteams-list" style="display: flex; flex-direction: column; gap: 4px;">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <button id="kiwi-back-btn" onclick="navigateUp()"
+            style="position: absolute; top: 24px; left: 24px; z-index: 1000; background: var(--glass-bg); color: var(--text-main); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 8px; cursor: pointer; display: none; align-items: center; gap: 8px; backdrop-filter: blur(12px);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" x2="20" y1="12" y2="12" />
+                <line x1="4" x2="20" y1="6" y2="6" />
+                <line x1="4" x2="20" y1="18" y2="18" />
+            </svg> Menu
+        </button>
+        <div id="content" style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center;">
+            <div style="text-align: center; width: 100%;">
+                <h1 style="font-family: 'Outfit'; font-size: 3rem; margin-bottom: 16px;" id="welcome-title"></h1>
+                <p style="color: var(--text-dim); font-size: 1.2rem; max-width: 600px; margin: 0 auto; line-height: 1.6;"
                     id="welcome-text">
                 </p>
             </div>
@@ -217,7 +235,6 @@
                 }
             };
             setLogo('sidebar-logo');
-            setLogo('welcome-logo');
 
             // Welcome Text
             document.getElementById('welcome-title').textContent = CONFIG.branding.welcomeTitle;
@@ -371,6 +388,47 @@
 
                 container.innerHTML = html;
 
+                // Build floating subteams sidebar
+                const subteamsList = document.getElementById('subteams-list');
+                let subHtml = '';
+
+                // Add Quick Start (Root files)
+                if (folders['root'] && folders['root'].files.length > 0) {
+                    subHtml += `<div style="padding: 8px 14px 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 4px;">Quick Start</div>`;
+                    subHtml += folders['root'].files.map(file => {
+                        const urlName = file.path.replace('.md', '');
+                        const href = `?page=${urlName}`;
+                        return `
+                            <a href="${href}" data-path="${file.path}" onclick="event.preventDefault(); document.getElementById('subteams-sidebar').style.display='none'; loadFile('${file.path}', null)" style="display: flex; align-items: center; gap: 12px; color: var(--text-main); text-decoration: none; padding: 8px 14px; border-radius: 12px; transition: background 0.2s; font-size: 0.95rem;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                                <img src="svg/doc.svg" data-base="svg/doc" width="16" height="16" style="opacity: 0.8;">
+                                ${file.displayName}
+                            </a>
+                        `;
+                    }).join('');
+                    subHtml += `<div style="padding: 12px 14px 4px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-top: 4px; border-top: 1px solid var(--glass-border);">Subteams</div>`;
+                }
+
+                for (const [folderId, folderData] of Object.entries(folders)) {
+                    if (folderId !== 'root') {
+                        const mapping = (CONFIG.folderMapping || []).find(m => m.folder_id === folderId);
+                        const folderDesc = mapping ? mapping.description : folderId;
+                        const iconName = iconMap[folderId] || 'code-2';
+
+                        const rFile = folderData.readme || folderData.files[0];
+                        if (rFile) {
+                            const urlName = rFile.path.replace('.md', '');
+                            const href = `?page=${urlName}`;
+                            subHtml += `
+                                <a href="${href}" data-path="${rFile.path}" onclick="event.preventDefault(); document.getElementById('subteams-sidebar').style.display='none'; loadFile('${rFile.path}', null)" style="display: flex; align-items: center; gap: 12px; color: var(--text-main); text-decoration: none; padding: 10px 14px; border-radius: 12px; transition: background 0.2s; font-weight: 500;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                                    <img src="svg/dirs/${iconName}.svg" data-base="svg/dirs/${iconName}" width="18" height="18" style="opacity: 0.9;">
+                                    ${folderDesc}
+                                </a>
+                            `;
+                        }
+                    }
+                }
+                subteamsList.innerHTML = subHtml;
+
                 // Load default if exists
                 const params = new URLSearchParams(window.location.search);
                 const requested = params.get('page') || params.get('') || window.location.search.substring(1);
@@ -406,6 +464,26 @@
             }
 
             try {
+                // Update Back Button Visibility
+                const backBtn = document.getElementById('kiwi-back-btn');
+                const isHome = (!path || path.toLowerCase() === 'readme.md');
+                if (backBtn) {
+                    backBtn.style.display = isHome ? 'none' : 'flex';
+                }
+                // Hide floating bar on navigation
+                const sb = document.getElementById('subteams-sidebar');
+                if (sb && isHome) sb.style.display = 'none';
+
+                if (isHome) {
+                    content.style.minHeight = '80vh';
+                    content.style.display = 'flex';
+                    content.style.flexDirection = 'column';
+                    content.style.justifyContent = 'center';
+                } else {
+                    content.style.minHeight = 'auto';
+                    content.style.display = 'block';
+                }
+
                 content.innerHTML = `<div style="text-align: center; padding: 100px;">Loading content...</div>`;
                 content.style.opacity = '0';
                 content.style.transform = 'translateY(10px)';
@@ -532,6 +610,15 @@
 
         // Mobile Sidebar Toggle
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+        function navigateUp() {
+            const sb = document.getElementById('subteams-sidebar');
+            if (sb.style.display === 'none' || sb.style.display === '') {
+                sb.style.display = 'block';
+            } else {
+                sb.style.display = 'none';
+            }
+        }
 
         function toggleFolder(folderId) {
             const content = document.getElementById(`folder-${folderId}`);

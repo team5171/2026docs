@@ -1,0 +1,324 @@
+```
+
+ ______                        _________________
+ /_  __/__  ____ _____ ___     / ____<  /__  <  /
+  / / / _ \/ __ `/ __ `__ \   /___ \ / /  / // / 
+ / / /  __/ /_/ / / / / / /  ____/ // /  / // /  
+/_/  \___/\__,_/_/ /_/ /_/  /_____//_/  /_//_/   
+                                                 
+                           _   _     _                     _      _ 
+  _____      ___ __  ___  | |_| |__ (_)___    ___ ___   __| | ___| |
+ / _ \ \ /\ / / '_ \/ __| | __| '_ \| / __|  / __/ _ \ / _` |/ _ \ |
+| (_) \ V  V /| | | \__ \ | |_| | | | \__ \ | (_| (_) | (_| |  __/_|
+ \___/ \_/\_/ |_| |_|___/  \__|_| |_|_|___/  \___\___/ \__,_|\___(_)
+
+
+```                                                             
+FRC Team 5171 Software License — Restricted Use License  
+Copyright (c) 2026 FRC Team 5171.  
+All Rights Reserved.
+
+Only **FRC Team 5171** is recognized as the copyright holder of the Software.  
+No other individual, organization, or entity holds any ownership interest in the Software unless explicitly stated in writing by FRC Team 5171.
+
+This License is intentionally strict and is designed to legally protect the Software from unauthorized copying, modification, redistribution, commercial use, reverse engineering, or derivative creation.
+
+By obtaining, accessing, or using the Software, you agree to be bound by the terms of this License Agreement.
+
+---
+
+# 1. Definitions
+
+For the purposes of this Agreement, the following definitions apply:
+
+**Software**  
+Refers to the complete work distributed with this License, including but not limited to:
+
+- Source code  
+- Compiled binaries  
+- Build configurations  
+- Scripts and tooling  
+- Documentation  
+- Data files  
+- Configuration files  
+- Assets  
+- Algorithms  
+- Software architecture  
+- Structural organization and design patterns
+
+**Licensor**  
+Refers exclusively to **FRC Team 5171**, including its authorized representatives.
+
+**Licensee**  
+Refers to any individual or entity that obtains, accesses, downloads, copies, or otherwise uses the Software.
+
+---
+
+# 2. Ownership
+
+The Software and all associated intellectual property rights are and shall remain the exclusive property of **FRC Team 5171**.
+
+This includes but is not limited to:
+
+- Source code and compiled binaries  
+- Algorithms and logic  
+- System architecture  
+- File structures and design patterns  
+- Documentation and written materials  
+- Naming conventions and internal systems
+
+This License **does not transfer ownership** of the Software to the Licensee under any circumstances.
+
+All rights not explicitly granted in this Agreement are reserved by the Licensor.
+
+---
+
+# 3. Grant of License
+
+Subject to the terms and conditions of this Agreement, the Licensor grants the Licensee a **limited, non-exclusive, non-transferable, non-sublicensable, and revocable license** to:
+
+- View the Software
+- Download the Software
+- Install the Software
+- Use the Software **solely for private, internal, non-commercial evaluation or educational purposes**
+
+This License **does not permit**:
+
+- Public deployment
+- Production use
+- Commercial use
+- Redistribution
+- Derivative development
+- Public hosting
+
+Access to the Software does not grant the Licensee any rights beyond those explicitly listed.
+
+---
+
+# 4. Restrictions
+
+The Licensee is **strictly prohibited** from performing any of the following actions without explicit written permission from FRC Team 5171.
+
+## 4.1 Copying and Redistribution
+
+The Licensee may not:
+
+- Copy the Software
+- Redistribute the Software
+- Publish or upload the Software
+- Host the Software publicly
+- Share the Software with any third party
+- Mirror the repository or project contents
+
+Any form of public distribution is strictly prohibited.
+
+---
+
+## 4.2 Modification and Derivative Works
+
+The Licensee may not:
+
+- Modify the Software
+- Adapt or translate the Software
+- Patch or alter the Software
+- Create derivative works
+- Incorporate portions of the Software into other projects
+- Reuse internal structures, algorithms, or designs
+
+Any attempt to build new works based on the Software is prohibited.
+
+---
+
+## 4.3 Reverse Engineering
+
+The Licensee may not:
+
+- Reverse engineer the Software
+- Decompile binaries
+- Disassemble compiled code
+- Analyze internal algorithms
+- Extract architectural designs
+- Attempt to reconstruct source code from compiled materials
+
+Any activity intended to reveal internal implementation details is forbidden.
+
+---
+
+## 4.4 Commercial Use
+
+The Licensee may not use the Software for:
+
+- Commercial activity
+- Revenue generation
+- Business operations
+- Enterprise environments
+- Paid services
+- SaaS platforms
+- Public software products
+
+The Software may not be integrated into any system that generates revenue or supports commercial operations.
+
+---
+
+## 4.5 Competitive Use
+
+The Software may not be used for the development, research, training, or enhancement of any system that competes with or could reasonably be considered competitive with the Software.
+
+This includes:
+
+- Robotics control frameworks
+- Automation systems
+- Strategy software
+- Engineering tools
+- Educational robotics frameworks
+
+---
+
+## 4.6 License Removal or Alteration
+
+The Licensee may not:
+
+- Remove copyright notices
+- Modify license terms
+- Hide attribution information
+- Rebrand the Software
+- Claim authorship or ownership
+
+Misrepresenting the origin of the Software constitutes a violation of this Agreement.
+
+---
+
+## 4.7 Transfer of Rights
+
+The Licensee may not:
+
+- Sell the Software
+- Rent the Software
+- Lease the Software
+- Lend the Software
+- Sublicense the Software
+- Assign rights granted under this License
+- Transfer the Software to another party
+
+Any attempt to transfer rights is void.
+
+---
+
+# 5. Intellectual Property Protection
+
+The Software represents substantial intellectual effort by **FRC Team 5171**.
+
+All elements of the Software are protected under:
+
+- United States copyright law
+- International copyright conventions
+- Intellectual property law
+- Software protection statutes
+
+Unauthorized use constitutes **copyright infringement** and may result in legal action.
+
+---
+
+# 6. Termination
+
+This License remains in effect until terminated.
+
+Termination occurs **immediately and automatically** if the Licensee violates any provision of this Agreement.
+
+Upon termination, the Licensee must:
+
+1. Immediately cease all use of the Software.
+2. Permanently delete and destroy all copies of the Software.
+3. Remove any stored or archived versions.
+
+Failure to comply after termination constitutes **willful copyright infringement**.
+
+---
+
+# 7. Disclaimer of Warranties
+
+THE SOFTWARE IS PROVIDED **“AS IS”** WITHOUT WARRANTY OF ANY KIND.
+
+THE LICENSOR EXPRESSLY DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO:
+
+- MERCHANTABILITY
+- FITNESS FOR A PARTICULAR PURPOSE
+- NON-INFRINGEMENT
+- RELIABILITY
+- PERFORMANCE
+- SECURITY
+
+The Licensee assumes all risks associated with the use of the Software.
+
+---
+
+# 8. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, **FRC TEAM 5171 SHALL NOT BE LIABLE** FOR ANY DAMAGES ARISING FROM THE USE OR INABILITY TO USE THE SOFTWARE.
+
+This includes but is not limited to:
+
+- Direct damages
+- Indirect damages
+- Incidental damages
+- Consequential damages
+- Loss of data
+- Loss of revenue
+- Hardware damage
+- System failure
+- Operational disruption
+
+This limitation applies regardless of the theory of liability.
+
+---
+
+# 9. Updates and Future License Versions
+
+FRC Team 5171 reserves the right to:
+
+- Modify this License
+- Publish updated versions
+- Replace this License with a successor license
+- Clarify or amend restrictions
+- Issue special permissions
+
+Unless otherwise stated, the **most recent version of the License applies** to the Software.
+
+---
+
+# 10. Governing Law
+
+This Agreement shall be governed by and interpreted in accordance with the laws of the **State of California**, United States, without regard to conflict-of-law principles.
+
+Any disputes arising under this License shall be resolved within the appropriate courts located within California.
+
+---
+
+# 11. Severability
+
+If any provision of this Agreement is determined to be invalid or unenforceable by a court of competent jurisdiction, the remaining provisions shall remain fully enforceable.
+
+---
+
+# 12. No Waiver
+
+Failure by FRC Team 5171 to enforce any provision of this License does not constitute a waiver of the right to enforce that provision in the future.
+
+---
+
+# 13. Entire Agreement
+
+This License constitutes the **complete and exclusive agreement** governing the Software and supersedes any prior agreements, discussions, or understandings related to its use.
+
+# 14. Forked Info
+
+This License is adapted from ViB License 4.1: https://www.veerbajaj.com/license
+---
+
+For licensing inquiries, permissions, or special-use requests, contact:
+
+**FRC Team 5171**
+
+---
+
+This is the **FRC Team 5171 Software License — Restricted Use License** and applies to all projects that include or reference it.

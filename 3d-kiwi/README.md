@@ -1,4 +1,4 @@
-# 3d
+# 3D Printing
 
 This section is under construction.
 

@@ -6,6 +6,6 @@ Robotics is like a team sport; everyone is working together, acquiring new skill
 
 <!-- @avatar(name="Dr. Hanna" subtext="Mentor" src="attachments/bios/hanna.jpg") -->
 
-<!-- @avatar(name="Mentor Kevin" subtext="Mentor" src="attachments/bios/kevin.png") -->
+<!-- @avatar(name="Mentor Kevin" subtext="Mentor" src="attachments/bios/kevin.jpg") -->
 
-<!-- @avatar(name="Mentor Damon" subtext="Mentor" src="attachments/bios/anon.png") -->
+<!-- @avatar(name="Mentor Damon" subtext="Mentor" src="attachments/bios/anon.jpg") -->
